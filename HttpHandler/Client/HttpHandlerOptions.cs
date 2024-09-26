@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace SSHC
+namespace SSHC.Client
 {
     public class HttpHandlerOptions
     {
