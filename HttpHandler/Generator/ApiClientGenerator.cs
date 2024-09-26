@@ -46,7 +46,7 @@ namespace SSHC.Generator
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.GetCustomAttributes(typeof(AutoGenerateApiClientAttribute), true).Length > 0)
+                if (type.IsDefined(typeof(AutoGenerateApiClientAttribute)))
                 {
                     yield return type;
                 }
@@ -55,8 +55,8 @@ namespace SSHC.Generator
 
         private static bool IsValidAnnotatedApiController(Type autogeneratableType)
         {
-            bool isApiController = autogeneratableType.GetCustomAttribute<ApiControllerAttribute>() is not null;
-            bool hasRoute = autogeneratableType.GetCustomAttribute<RouteAttribute>() is not null;
+            bool isApiController = autogeneratableType.IsDefined(typeof(ApiControllerAttribute));
+            bool hasRoute = autogeneratableType.IsDefined(typeof(RouteAttribute));
 
             return isApiController && hasRoute;
         }
@@ -87,8 +87,8 @@ namespace SSHC.Generator
         private static bool IsValidAnnotatedApiMethod(MethodInfo method)
         {
             bool valid =
-                method.GetCustomAttribute<HttpGetAttribute>() is not null ||
-                method.GetCustomAttribute<HttpPostAttribute>() is not null;
+                method.IsDefined(typeof(HttpGetAttribute)) ||
+                method.IsDefined(typeof(HttpPostAttribute));
 
             return valid;
         }
