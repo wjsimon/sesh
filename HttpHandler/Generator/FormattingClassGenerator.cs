@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Text;
+﻿using System.Text;
 
 namespace SSHC.Generator
 {
@@ -39,8 +38,8 @@ namespace SSHC.Generator
         {
             //get only here; this is a GET
             _container.Lines.Add(
-                $"public Task {methodInfo.MethodName}" +
-                $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{kvp.Key} {kvp.Value}"))})"
+                $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
+                $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{kvp.Key.Name} {kvp.Value}"))})"
             );
 
             return this;
@@ -59,8 +58,7 @@ namespace SSHC.Generator
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
         {
-            //<{ methodInfo.ReturnType}>
-            var snippet = $"";
+            var snippet = returnType != typeof(void) ? $"<{returnType.Name}>" : "";
             return snippet;
         }
     }
