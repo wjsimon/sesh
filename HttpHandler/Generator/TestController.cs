@@ -20,6 +20,7 @@ namespace SSHC.Generator
 
         [HttpPost, Returns(null)]
         public IActionResult Post() { return Ok(); }
+
         public IActionResult NotAnnotated() { return BadRequest(); }
         private void PrivateMethod() { }
     }

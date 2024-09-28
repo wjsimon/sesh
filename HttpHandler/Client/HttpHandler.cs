@@ -18,6 +18,9 @@ namespace SSHC.Client
             return await ParseResponse<TResult>(response);
         }
 
+        public async Task PostAsync<TValue>(string? requestUri, TValue? payload)
+            => await this.PostAsyncInternal<TValue, object>(requestUri, payload);
+        
         public Task<TResult?> PostAsync<TResult>(string? requestUri)
             => PostAsyncInternal<object, TResult>(requestUri, null);
 
