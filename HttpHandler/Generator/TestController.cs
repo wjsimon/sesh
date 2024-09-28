@@ -18,7 +18,7 @@ namespace SSHC.Generator
             return Ok(); 
         }
 
-        [HttpPost, Returns(null)]
+        [HttpPost, Returns(typeof(void))]
         public IActionResult Post() { return Ok(); }
 
         public IActionResult NotAnnotated() { return BadRequest(); }
