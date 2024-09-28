@@ -30,7 +30,16 @@ namespace SSHC.Client
         private async Task<TResult?> PostAsyncInternal<TValue, TResult>(string? requestUri, TValue? payload)
         {
             var response = await _httpClient.PostAsJsonAsync(requestUri, payload, JsonSerializerOptions);
-            if (!response.IsSuccessStatusCode) { return default; } //throw instead?
+            if (!response.IsSuccessStatusCode) 
+            {
+                if (_options is not null && _options.ThrowOnStatusCodeUnsuccessful)
+                {
+                    throw new HttpRequestException(response.ReasonPhrase);
+                }
+
+                return default; 
+            }
+
             return await ParseResponse<TResult>(response);
         }
 
