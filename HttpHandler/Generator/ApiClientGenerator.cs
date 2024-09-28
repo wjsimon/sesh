@@ -4,7 +4,7 @@ namespace SSHC.Generator
 {
     public static class ApiClientGenerator
     {
-        public static void Generate(Assembly controllerAssembly) 
+        public static void Generate(Assembly controllerAssembly) //support multiple assemblies
         {
             //get all controllers to be generate
             //do them step-by-step
@@ -20,11 +20,11 @@ namespace SSHC.Generator
             FormattingClassGenerator generator = new();
 
             generator.AddNamespace($"TestSpace");
-            generator.AddClassDefinition(generationInformation);
-
+            generator.AddClass(generationInformation);
+            generator.AddGetOnlyProperty(typeof(string), "ApiControllerName", generationInformation.ControllerName);
             foreach (var method in generationInformation.Methods)
             {
-                generator.AddMethodDefintion(method);
+                generator.AddPublicMethod(method);
             }
 
             Console.WriteLine(generator.Generate());

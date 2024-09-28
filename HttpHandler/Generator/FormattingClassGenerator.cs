@@ -22,7 +22,7 @@ namespace SSHC.Generator
             return this;
         }
 
-        public FormattingClassGenerator AddClassDefinition(AutogenerationInformation classInfo)
+        public FormattingClassGenerator AddClass(AutogenerationInformation classInfo)
         {
             _container.Lines.Add($"public class {classInfo.ControllerRoute}ApiClient : ApiClient");
             return this;
@@ -34,7 +34,7 @@ namespace SSHC.Generator
             return this;
         }
 
-        public FormattingClassGenerator AddMethodDefintion(AutogenerationMethodInformation methodInfo)
+        public FormattingClassGenerator AddPublicMethod(AutogenerationMethodInformation methodInfo)
         {
             //get only here; this is a GET
             _container.Lines.Add(
