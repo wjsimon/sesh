@@ -4,17 +4,25 @@ namespace SSHC.Generator
 {
     public static class ApiClientGenerator
     {
-        public static void Generate(Assembly controllerAssembly) //support multiple assemblies
+        public static void Generate(Assembly controllerAssembly, bool save = true) //support multiple assemblies
         {
-            //get all controllers to be generate
-            //do them step-by-step
             foreach (var info in ControllerInformationCollector.Collect(controllerAssembly).Where(i => i is not null))
             {
-                GenerateApiClient(info!);
+                string fileContent = GenerateApiClient(info!);
+                string fileName = $"{info!.ControllerRoute}ApiClient.cs";
+                string filePath = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\\{fileName}";
+
+                if (save && !File.Exists(filePath))
+                {
+                    var dir = Path.GetDirectoryName(filePath);
+                    Console.WriteLine($"Saving generated ApiClient to {filePath}");
+                    SaveFile(filePath, fileContent);
+                    Console.WriteLine($"{fileName} saved!");
+                }
             }
         }
 
-        private static void GenerateApiClient(AutogenerationInformation generationInformation)
+        private static string GenerateApiClient(AutogenerationInformation generationInformation)
         {
             Console.WriteLine($"Starting to generate ApiClient for {generationInformation.ControllerName}...");
             FormattingClassGenerator generator = new();
@@ -27,30 +35,13 @@ namespace SSHC.Generator
                 generator.AddPublicMethod(method);
             }
 
-            Console.WriteLine(generator.Generate());
-            //public class TestApiClient, TestControllerApiClient via option
-            //generate one method per methodinformation => 
-            //  get number of parameters, at more than 3 parameters: linebreak all of them for readability (nice-to-have)
-            //  public Task<returnvalue> MethodInformation.MethodName([FromQuery]param.Key1 param.Value1, [FromQuery]paramKey2 param.Value2, etc...)  
+            string fileContent = generator.Generate();
+            Console.WriteLine(fileContent);
+
+            return fileContent;
         }
 
-        //string controllerName = GetControllerRoute(type);
-        //string fileName = $"{controllerName}ApiClient.cs";
-
-
-
-
-
-
-        //        var testMethods = from assembly in assemblies
-        //                          from type in assembly.GetTypes()
-        //                          from method in type.GetMethods()
-        //                          where method.IsDefined(typeof(TestMethodAttribute))
-        //                          select method;
-
-        //foreach (var method in testMethods)
-        //{
-        //    Console.WriteLine(method);
-        //}
+        private static void SaveFile(string fileName, string fileContent)
+            => File.WriteAllText(fileName, fileContent);
     }
 }

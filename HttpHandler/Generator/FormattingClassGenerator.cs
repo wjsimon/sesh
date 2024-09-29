@@ -8,52 +8,53 @@ namespace SSHC.Generator
 
         public FormattingClassGenerator AddUsings(IEnumerable<string> usings)
         {
-            foreach (string line in usings)
-            {
-                _container.Lines.Insert(0, $"{line};");
-            }
-
+            _container.AddUsings(usings);
             return this;
         }
 
         public FormattingClassGenerator AddNamespace(string nameSpace)
         {
-            _container.Lines.Add($"namespace {nameSpace}");
+            _container.SetNamespace($"namespace {nameSpace}");
             return this;
         }
 
         public FormattingClassGenerator AddClass(AutogenerationInformation classInfo)
         {
-            _container.Lines.Add($"public class {classInfo.ControllerRoute}ApiClient : ApiClient");
+            _container.SetClassDefinition($"public class {classInfo.ControllerRoute}ApiClient : ApiClient");
             return this;
         }
 
         public FormattingClassGenerator AddGetOnlyProperty(Type returnValue, string propertyName, string propertyValue)
         {
-            _container.Lines.Add($"public {returnValue.Name} {propertyName} => {propertyValue};");
+            _container.AddPublicPropertyDefintion($"public {returnValue.Name} {propertyName} => \"{propertyValue}\";");
             return this;
         }
 
         public FormattingClassGenerator AddPublicMethod(AutogenerationMethodInformation methodInfo)
         {
             //get only here; this is a GET
-            _container.Lines.Add(
-                $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
-                $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{kvp.Key.Name} {kvp.Value}"))})"
+            _container.AddPublicMethodDefinition(
+                MakeMethodDefinition(methodInfo),
+                MakeMethodBody(methodInfo)
             );
 
             return this;
         }
 
+        private static string MakeMethodDefinition(AutogenerationMethodInformation methodInfo)
+        {
+            return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
+                            $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{kvp.Key.Name} {kvp.Value}"))}) ";
+        }
+
+        private static List<string> MakeMethodBody(AutogenerationMethodInformation methodInfo)
+        {
+            return new();
+        }
+
         public string Generate()
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (var line in _container.Lines)
-            {
-                sb.AppendLine(line);
-            }
-
-            return sb.ToString();
+            return _container.ToString();
         }
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
