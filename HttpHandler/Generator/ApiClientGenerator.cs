@@ -10,7 +10,7 @@ namespace SSHC.Generator
             {
                 string fileContent = GenerateApiClient(info!);
                 string fileName = $"{info!.ControllerRoute}ApiClient.cs";
-                string filePath = $"{Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName}\\{fileName}";
+                string filePath = $"{Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName}\\{fileName}";
 
                 if (save && !File.Exists(filePath))
                 {

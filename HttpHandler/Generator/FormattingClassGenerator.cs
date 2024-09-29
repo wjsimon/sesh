@@ -16,6 +16,7 @@
         };
 
         private AutogenerationCodeContainer _container = new();
+
         public FormattingClassGenerator AddUsings(IEnumerable<string> usings)
         {
             _container.AddUsings(usings);
@@ -51,6 +52,9 @@
             return this;
         }
 
+        public string Generate()
+            => _container.ToString();
+
         private static string MakeMethodDefinition(AutogenerationMethodInformation methodInfo)
         {
             return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
@@ -58,6 +62,11 @@
         }
 
         private static List<string> MakeMethodBody(AutogenerationMethodInformation methodInfo)
+        {
+            return new();
+        }
+
+        private static List<string> MakeGetMethodBody(AutogenerationMethodInformation methodInfo)
         {
             return new();
         }
@@ -72,9 +81,6 @@
 
             return type.Name;
         }
-
-        public string Generate()
-            => _container.ToString();
         
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
             => returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
