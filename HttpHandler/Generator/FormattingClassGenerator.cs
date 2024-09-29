@@ -4,8 +4,20 @@ namespace SSHC.Generator
 {
     internal class FormattingClassGenerator
     {
-        private AutogenerationCodeContainer _container = new();
+        private static readonly Dictionary<string, string> _primitiveMatches = new Dictionary<string, string>()
+        {
+            { typeof(string).Name, "string" },
+            { typeof(bool).Name, "bool" },
+            { typeof(int).Name, "int" },
+            { typeof(uint).Name, "uint" },
+            { typeof(long).Name, "long" },
+            { typeof(float).Name, "float" },
+            { typeof(double).Name, "double" },
+            { typeof(void).Name, "void" },
+            { typeof(object).Name, "object" },
+        };
 
+        private AutogenerationCodeContainer _container = new();
         public FormattingClassGenerator AddUsings(IEnumerable<string> usings)
         {
             _container.AddUsings(usings);
@@ -26,7 +38,7 @@ namespace SSHC.Generator
 
         public FormattingClassGenerator AddGetOnlyProperty(Type returnValue, string propertyName, string propertyValue)
         {
-            _container.AddPublicPropertyDefintion($"public {returnValue.Name} {propertyName} => \"{propertyValue}\";");
+            _container.AddPublicPropertyDefintion($"public {SwapPrimitive(returnValue)} {propertyName} => \"{propertyValue}\";");
             return this;
         }
 
@@ -44,12 +56,23 @@ namespace SSHC.Generator
         private static string MakeMethodDefinition(AutogenerationMethodInformation methodInfo)
         {
             return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
-                            $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{kvp.Key.Name} {kvp.Value}"))}) ";
+                            $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{SwapPrimitive(kvp.Key)} {kvp.Value}"))}) ";
         }
 
         private static List<string> MakeMethodBody(AutogenerationMethodInformation methodInfo)
         {
             return new();
+        }
+
+        private static string SwapPrimitive(Type type)
+        {
+            var name = type.Name;
+            if (_primitiveMatches.ContainsKey(name))
+            {
+                return _primitiveMatches[type.Name];
+            }
+
+            return type.Name;
         }
 
         public string Generate()
@@ -59,7 +82,7 @@ namespace SSHC.Generator
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
         {
-            var snippet = returnType != typeof(void) ? $"<{returnType.Name}>" : "";
+            var snippet = returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
             return snippet;
         }
     }
