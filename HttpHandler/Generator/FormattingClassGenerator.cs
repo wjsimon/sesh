@@ -1,6 +1,4 @@
-﻿using System.Text;
-
-namespace SSHC.Generator
+﻿namespace SSHC.Generator
 {
     internal class FormattingClassGenerator
     {
