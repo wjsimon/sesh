@@ -54,7 +54,7 @@
         private static string MakeMethodDefinition(AutogenerationMethodInformation methodInfo)
         {
             return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
-                            $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{SwapPrimitive(kvp.Key)} {kvp.Value}"))}) ";
+                   $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{SwapPrimitive(kvp.Key)} {kvp.Value}"))}) ";
         }
 
         private static List<string> MakeMethodBody(AutogenerationMethodInformation methodInfo)
@@ -74,14 +74,9 @@
         }
 
         public string Generate()
-        {
-            return _container.ToString();
-        }
-
+            => _container.ToString();
+        
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
-        {
-            var snippet = returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
-            return snippet;
-        }
+            => returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
     }
 }

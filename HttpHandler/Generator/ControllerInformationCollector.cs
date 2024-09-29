@@ -87,10 +87,9 @@ namespace SSHC.Generator
         }
 
         private static IEnumerable<MethodInfo> GetAllApiMethodsFromController(Type controllerType)
-        {
-            var all = controllerType.GetMethods().Where(IsValidAnnotatedApiMethod);
-            return all;
-        }
+            => controllerType.GetMethods().Where(IsValidAnnotatedApiMethod);
+            
+        
 
         private static bool IsValidAnnotatedApiMethod(MethodInfo method)
         {
