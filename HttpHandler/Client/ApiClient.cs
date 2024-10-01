@@ -23,6 +23,8 @@ namespace SSHC.Client
             => _httpHandler.PostAsync<TValue, TResult>(requestUri, payload);
         protected virtual Task<TResult?> PostAsync<TResult>(string? requestUri)
             => _httpHandler.PostAsync<TResult>(requestUri);
+        protected virtual Task PostAsync<TValue>(string? requestUri, TValue? payload)
+            => _httpHandler.PostAsync<TValue>(requestUri, payload);
 
         protected virtual string Uri([CallerMemberName] string? caller = null)
         {

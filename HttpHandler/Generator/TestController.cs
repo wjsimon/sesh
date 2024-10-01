@@ -31,7 +31,31 @@ namespace SSHC.Generator
         }
 
         [HttpPost, Returns(typeof(void))]
+        public IActionResult PostEmpty() { return Ok(); }
+
+        [HttpPost, Returns(typeof(void))]
+        public IActionResult OneParameterPostEmpty([FromQuery] int index) { return Ok(); }
+
+        [HttpPost, Returns(typeof(void))]
+        public IActionResult TwoParametersPostEmpty([FromQuery] int index, [FromQuery] string name) { return Ok(); }
+
+        [HttpPost, Returns(typeof(bool))]
+        public IActionResult ThreeParametersPostEmpty([FromQuery] int index, [FromQuery] string name, [FromQuery] object value) { return Ok(); }
+
+        [HttpPost, Returns(typeof(void))]
         public IActionResult Post([FromBody] object payload) { return Ok(); }
+
+        [HttpPost, Returns(typeof(void))]
+        public IActionResult OneParameterPost([FromQuery] int index, [FromBody] object payload) { return Ok(); }
+
+        [HttpPost, Returns(typeof(bool))]
+        public IActionResult TwoParametersPost([FromQuery] int index, [FromQuery] string name, [FromBody] object payload) { return Ok(); }
+
+        [HttpPost, Returns(typeof(bool))]
+        public IActionResult ThreeParametersPost([FromQuery] int index, [FromQuery] string name, [FromQuery] object value, [FromBody] object payload) { return Ok(); }
+
+        [HttpPost, Returns(typeof(bool))]
+        public IActionResult ThreeParametersPostUnordered([FromQuery] int index, [FromBody] object payload, [FromQuery] string name, [FromQuery] object value) { return Ok(); }
 
         public IActionResult NotAnnotated() { return BadRequest(); }
         private void PrivateMethod() { }

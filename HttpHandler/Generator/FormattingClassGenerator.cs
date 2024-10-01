@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
-using System.Reflection.Metadata;
-
-namespace SSHC.Generator
+﻿namespace SSHC.Generator
 {
     internal class FormattingClassGenerator
     {
@@ -46,7 +43,6 @@ namespace SSHC.Generator
 
         public FormattingClassGenerator AddPublicMethod(AutogenerationMethodInformation methodInfo)
         {
-            //get only here; this is a GET
             _container.AddPublicMethodDefinition(
                 MakeMethodDefinition(methodInfo),
                 MakeMethodBody(methodInfo)
@@ -61,7 +57,7 @@ namespace SSHC.Generator
         private static string MakeMethodDefinition(AutogenerationMethodInformation methodInfo)
         {
             return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
-                   $"({string.Join(", ", methodInfo.ParametersMetaData.Select(kvp => $"{SwapPrimitive(kvp.Key)} {kvp.Value}"))}) ";
+                   $"({string.Join(", ", methodInfo.ParametersMetaData.Select(tuple => $"{SwapPrimitive(tuple.Type)} {tuple.Name}"))}) ";
         }
 
         private static List<string> MakeMethodBody(AutogenerationMethodInformation methodInfo) => methodInfo.Type switch
@@ -75,9 +71,9 @@ namespace SSHC.Generator
         {
             //separate cases for: 0, 1, 2 params, and then one for any amount after (dictionary)
             0 => MakeGetMethodBody(methodInfo.ReturnType),
-            1 => MakeGetMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData.First().Value),
+            1 => MakeGetMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData.First().Name),
             2 => MakeGetMethodBody(methodInfo.ReturnType, 
-                (methodInfo.ParametersMetaData.ElementAt(0).Value, methodInfo.ParametersMetaData.ElementAt(1).Value)),
+                (methodInfo.ParametersMetaData.ElementAt(0).Name, methodInfo.ParametersMetaData.ElementAt(1).Name)),
             _ => MakeGetMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData)
         };
 
@@ -97,9 +93,9 @@ namespace SSHC.Generator
             => methodInfo.ParametersMetaData.Count() switch
         {
             0 => MakePostMethodBody(methodInfo.ReturnType),
-            1 => MakePostMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData.First().Value),
+            1 => MakePostMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData.First().Name),
             2 => MakePostMethodBody(methodInfo.ReturnType,
-                (methodInfo.ParametersMetaData.ElementAt(0).Value, methodInfo.ParametersMetaData.ElementAt(1).Value)),
+                (methodInfo.ParametersMetaData.ElementAt(0).Name, methodInfo.ParametersMetaData.ElementAt(1).Name)),
             _ => MakePostMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData)
         };
 
@@ -108,22 +104,22 @@ namespace SSHC.Generator
         {
             1 => MakePostMethodBody(
                 methodInfo.ReturnType, 
-                methodInfo.ParametersMetaData.First().Key, 
-                methodInfo.ParametersMetaData.First().Value),
+                methodInfo.ParametersMetaData.First().Type, 
+                methodInfo.ParametersMetaData.First().Name),
             2 => MakePostMethodBody(
                 methodInfo.ReturnType,
-                methodInfo.ParametersMetaData.Last().Key,
-                methodInfo.ParametersMetaData.Last().Value,
-                methodInfo.ParametersMetaData.First().Value),
+                methodInfo.ParametersMetaData.Last().Type,
+                methodInfo.ParametersMetaData.Last().Name,
+                methodInfo.ParametersMetaData.First().Name),
             3 => MakePostMethodBody(
                 methodInfo.ReturnType,
-                methodInfo.ParametersMetaData.Last().Key,
-                methodInfo.ParametersMetaData.Last().Value,
-                (methodInfo.ParametersMetaData.ElementAt(0).Value, methodInfo.ParametersMetaData.ElementAt(1).Value)),
+                methodInfo.ParametersMetaData.Last().Type,
+                methodInfo.ParametersMetaData.Last().Name,
+                (methodInfo.ParametersMetaData.ElementAt(0).Name, methodInfo.ParametersMetaData.ElementAt(1).Name)),
             _ => MakePostMethodBody(
                 methodInfo.ReturnType,
-                methodInfo.ParametersMetaData.Last().Key,
-                methodInfo.ParametersMetaData.Last().Value,
+                methodInfo.ParametersMetaData.Last().Type,
+                methodInfo.ParametersMetaData.Last().Name,
                 methodInfo.ParametersMetaData)
         };
 
@@ -148,11 +144,11 @@ namespace SSHC.Generator
             return new List<string>() { str };
         }
 
-        private static List<string> MakeGetMethodBody(Type returnType, Dictionary<Type, string> parameterValues)
+        private static List<string> MakeGetMethodBody(Type returnType, List<(Type Type, string Name)> parameterValues)
         {
             var lines = new List<string>();
             lines.Add($"Dictionary<string, string> dict = new();");
-            foreach (var value in parameterValues.Values)
+            foreach (var value in parameterValues)
             {
                 //$"\"{parameterValueName}\""}, { parameterValueName}
                 lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
@@ -184,11 +180,11 @@ namespace SSHC.Generator
             return new List<string>() { str };
         }
 
-        private static List<string> MakePostMethodBody(Type returnType, Dictionary<Type, string> parameterValues)
+        private static List<string> MakePostMethodBody(Type returnType, List<(Type Type, string Name)> parameterValues)
         {
             var lines = new List<string>();
             lines.Add($"Dictionary<string, string> dict = new();");
-            foreach (var value in parameterValues.Values)
+            foreach (var value in parameterValues)
             {
                 //$"\"{parameterValueName}\""}, { parameterValueName}
                 lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
@@ -226,13 +222,13 @@ namespace SSHC.Generator
             return new List<string>() { str };
         }
 
-        private static List<string> MakePostMethodBody(Type returnType, Type payloadType, string payloadName, Dictionary<Type, string> parameterValues)
+        private static List<string> MakePostMethodBody(Type returnType, Type payloadType, string payloadName, List<(Type Type, string Name)> parameterValues)
         {
             var lines = new List<string>();
             lines.Add($"Dictionary<string, string> dict = new();");
 
-            parameterValues.Remove(parameterValues.Last().Key);
-            foreach (var value in parameterValues.Values)
+            parameterValues.Remove(parameterValues.Last());
+            foreach (var value in parameterValues)
             {
                 //$"\"{parameterValueName}\""}, { parameterValueName}
                 lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
@@ -267,7 +263,9 @@ namespace SSHC.Generator
             => returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
-            => $"<{SwapPrimitive(returnType)}{(payloadType != typeof(void) ? $", {SwapPrimitive(payloadType)}" : "")}>";
-        
+        {
+            var returnStr = returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}, " : "<";
+            return $"{returnStr}{(payloadType != typeof(void) ? $"{SwapPrimitive(payloadType)}" : "")}>";
+        }
     }
 }
