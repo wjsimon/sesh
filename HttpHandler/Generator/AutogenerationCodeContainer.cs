@@ -60,12 +60,20 @@ namespace SSHC.Generator
                 lines.Add(line);
             }
             lines.Add("");
-            foreach ((string def, string[] body) method in _publicMethods)
+            foreach ((string Def, string[] Body) method in _publicMethods)
             {
-                lines.Add(method.def);
-                lines.Add("{");
-                lines.AddRange(method.body);
-                lines.Add("}");
+                lines.Add(method.Def);
+                if (method.Body.Count() == 1)
+                {
+                    lines.Add($"\t=> {method.Body.First()}");
+                }
+                else
+                {
+                    lines.Add("{");
+                    lines.AddRange(method.Body);
+                    lines.Add("}");
+                }
+
                 lines.Add("");
             }
             lines.RemoveAt(lines.Count - 1); //removes line break after last method
@@ -104,11 +112,7 @@ namespace SSHC.Generator
         private static string PrependSingleIndent(string str, int tabs)
         {
             if (tabs <= 0) { return str; }
-            for (int i = 0; i < tabs; i++)
-            {
-                str = "\t" + str;
-            }
-
+            for (int i = 0; i < tabs; i++) { str = "\t" + str; }
             return str;
         }
     }

@@ -30,8 +30,8 @@ namespace SSHC.Client
             return $"{ApiControllerName}/{AdjustCallerMemberName(caller)}";
         }
 
-        protected virtual string Uri(Dictionary<string, string?> param, [CallerMemberName] string? caller = null)
-            => QueryHelpers.AddQueryString(Uri(caller), param);
+        protected virtual string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
+            => QueryHelpers.AddQueryString(Uri(caller), dict);
 
         protected string Uri(string paramName, string? paramValue, [CallerMemberName] string? caller = null)
         {

@@ -8,7 +8,7 @@ internal class Program
         Console.WriteLine("Starting generator...");
         Console.WriteLine("---------------------");
         var controllerAssembly = Assembly.GetAssembly(typeof(TestController));
-        ApiClientGenerator.Generate(controllerAssembly);
+        ApiClientGenerator.Generate(controllerAssembly, false);
         Console.WriteLine("---------------------");
         Console.WriteLine("Finished generating.");
         Console.WriteLine("---------------------");

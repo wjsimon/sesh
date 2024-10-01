@@ -13,13 +13,25 @@ namespace SSHC.Generator
         public IActionResult GetRenamed() { return Ok(); }
 
         [HttpGet, Returns(typeof(bool))]
-        public IActionResult ParameterizedGet([FromBody] int index, [FromBody] string name, [FromBody] object value) 
+        public IActionResult OneParameterGet([FromQuery] int index)
+        {
+            return Ok();
+        }
+
+        [HttpGet, Returns(typeof(bool))]
+        public IActionResult TwoParameterGet([FromQuery] int index, [FromQuery] string name)
+        {
+            return Ok();
+        }
+
+        [HttpGet, Returns(typeof(bool))]
+        public IActionResult ThreeParameterGet([FromQuery] int index, [FromQuery] string name, [FromQuery] object value) 
         { 
             return Ok(); 
         }
 
         [HttpPost, Returns(typeof(void))]
-        public IActionResult Post() { return Ok(); }
+        public IActionResult Post([FromBody] object payload) { return Ok(); }
 
         public IActionResult NotAnnotated() { return BadRequest(); }
         private void PrivateMethod() { }

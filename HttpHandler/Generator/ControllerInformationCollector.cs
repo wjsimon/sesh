@@ -44,6 +44,7 @@ namespace SSHC.Generator
                     GetControllerMethodName(method),
                     GetControllerMethodType(method),
                     GetControllerMethodParameters(method),
+                    GetPostFromBodyParameterIndex(method),
                     GetControllerMethodReturnType(method)
                 );
 
@@ -138,6 +139,16 @@ namespace SSHC.Generator
             }
 
             return paramDict;
+        }
+
+        private static int GetPostFromBodyParameterIndex(MethodInfo controllerMethod)
+        {
+            var fromBody = controllerMethod.GetParameters().Where(p =>
+                p.IsDefined(typeof(FromBodyAttribute))
+            ).FirstOrDefault();
+
+            if (fromBody == null) { return -1; }
+            return controllerMethod.GetParameters().ToList().IndexOf(fromBody);
         }
 
         private static Type GetControllerMethodReturnType(MethodInfo controllerMethod)
