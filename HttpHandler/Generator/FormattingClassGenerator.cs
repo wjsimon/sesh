@@ -2,19 +2,6 @@
 {
     internal class FormattingClassGenerator
     {
-        private static readonly Dictionary<string, string> _primitiveMatches = new Dictionary<string, string>()
-        {
-            { typeof(string).Name, "string" },
-            { typeof(bool).Name, "bool" },
-            { typeof(int).Name, "int" },
-            { typeof(uint).Name, "uint" },
-            { typeof(long).Name, "long" },
-            { typeof(float).Name, "float" },
-            { typeof(double).Name, "double" },
-            { typeof(void).Name, "void" },
-            { typeof(object).Name, "object" },
-        };
-
         private AutogenerationCodeContainer _container = new();
 
         public FormattingClassGenerator AddUsings(IEnumerable<string> usings)
@@ -67,205 +54,16 @@
             _ => new()
         };
 
-        private static List<string> MakeGetMethodBody(AutogenerationMethodInformation methodInfo) => methodInfo.ParametersMetaData.Count switch
-        {
-            //separate cases for: 0, 1, 2 params, and then one for any amount after (dictionary)
-            0 => MakeGetMethodBody(methodInfo.ReturnType),
-            1 => MakeGetMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData.First().Name),
-            2 => MakeGetMethodBody(methodInfo.ReturnType, 
-                (methodInfo.ParametersMetaData.ElementAt(0).Name, methodInfo.ParametersMetaData.ElementAt(1).Name)),
-            _ => MakeGetMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData)
-        };
-
-        private static List<string> MakePostMethodBody(AutogenerationMethodInformation methodInfo) 
-        {
-            if (methodInfo.FromBodyIndex < 0)
-            {
-                return MakePostMethodBodyEmpty(methodInfo);
-            }
-            else
-            {
-                return MakePostMethodBodyWithPayload(methodInfo);
-            }
-        }
-
-        private static List<string> MakePostMethodBodyEmpty(AutogenerationMethodInformation methodInfo) 
-            => methodInfo.ParametersMetaData.Count() switch
-        {
-            0 => MakePostMethodBody(methodInfo.ReturnType),
-            1 => MakePostMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData.First().Name),
-            2 => MakePostMethodBody(methodInfo.ReturnType,
-                (methodInfo.ParametersMetaData.ElementAt(0).Name, methodInfo.ParametersMetaData.ElementAt(1).Name)),
-            _ => MakePostMethodBody(methodInfo.ReturnType, methodInfo.ParametersMetaData)
-        };
-
-        private static List<string> MakePostMethodBodyWithPayload(AutogenerationMethodInformation methodInfo)
-            => methodInfo.ParametersMetaData.Count() switch
-        {
-            1 => MakePostMethodBody(
-                methodInfo.ReturnType, 
-                methodInfo.ParametersMetaData.First().Type, 
-                methodInfo.ParametersMetaData.First().Name),
-            2 => MakePostMethodBody(
-                methodInfo.ReturnType,
-                methodInfo.ParametersMetaData.Last().Type,
-                methodInfo.ParametersMetaData.Last().Name,
-                methodInfo.ParametersMetaData.First().Name),
-            3 => MakePostMethodBody(
-                methodInfo.ReturnType,
-                methodInfo.ParametersMetaData.Last().Type,
-                methodInfo.ParametersMetaData.Last().Name,
-                (methodInfo.ParametersMetaData.ElementAt(0).Name, methodInfo.ParametersMetaData.ElementAt(1).Name)),
-            _ => MakePostMethodBody(
-                methodInfo.ReturnType,
-                methodInfo.ParametersMetaData.Last().Type,
-                methodInfo.ParametersMetaData.Last().Name,
-                methodInfo.ParametersMetaData)
-        };
-
-        private static List<string> MakeGetMethodBody(Type returnType)
-            => new List<string>() { $"return this.GetAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}(Uri());" };
-
-        private static List<string> MakeGetMethodBody(Type returnType, string parameterValueName)
-        {
-            var str = $"return this.GetAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}" +
-                $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}));";
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakeGetMethodBody(Type returnType, (string, string)  parameterValueNames)
-        {
-            var str = $"return this.GetAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}" +
-                $"(Uri(" +
-                $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1})"}, " +
-                $"{$"(\"{parameterValueNames.Item2}\", {parameterValueNames.Item2})"}" +
-                $"));";
-
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakeGetMethodBody(Type returnType, List<(Type Type, string Name)> parameterValues)
-        {
-            var lines = new List<string>();
-            lines.Add($"Dictionary<string, string> dict = new();");
-            foreach (var value in parameterValues)
-            {
-                //$"\"{parameterValueName}\""}, { parameterValueName}
-                lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
-            }
-            lines.Add("");
-            lines.Add($"return this.GetAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}(Uri(dict));");
-
-            return lines;
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType)
-            => new List<string>() { $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}(Uri());" };
-
-        private static List<string> MakePostMethodBody(Type returnType, string parameterValueName)
-        {
-            var str = $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}" +
-               $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}));";
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType, (string, string) parameterValueNames)
-        {
-            var str = $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}" +
-                $"(Uri(" +
-                $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1})"}, " +
-                $"{$"(\"{parameterValueNames.Item2}\", {parameterValueNames.Item2})"}" +
-                $"));";
-
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType, List<(Type Type, string Name)> parameterValues)
-        {
-            var lines = new List<string>();
-            lines.Add($"Dictionary<string, string> dict = new();");
-            foreach (var value in parameterValues)
-            {
-                //$"\"{parameterValueName}\""}, { parameterValueName}
-                lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
-            }
-            lines.Add("");
-            lines.Add($"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType)}(Uri(dict));");
-
-            return lines;
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType, Type payloadType, string payloadName)
-        {
-            var str = 
-                $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}(Uri(), {payloadName});";
-
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType, Type payloadType, string payloadName, string parameterValueName)
-        {
-            var str = $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}" +
-                $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}), {payloadName})";
-
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType, Type payloadType, string payloadName, (string, string) parameterValueNames)
-        {
-            var str = $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}" +
-                $"(Uri(" +
-                $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1})"}, " +
-                $"{$"(\"{parameterValueNames.Item2}\", {parameterValueNames.Item2})"}" +
-                $"), {payloadName});";
-
-            return new List<string>() { str };
-        }
-
-        private static List<string> MakePostMethodBody(Type returnType, Type payloadType, string payloadName, List<(Type Type, string Name)> parameterValues)
-        {
-            var lines = new List<string>();
-            lines.Add($"Dictionary<string, string> dict = new();");
-
-            parameterValues.Remove(parameterValues.Last());
-            foreach (var value in parameterValues)
-            {
-                //$"\"{parameterValueName}\""}, { parameterValueName}
-                lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
-            }
-            lines.Add("");
-            lines.Add($"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}(Uri(dict), {payloadName});");
-
-            return lines;
-        }
+        private static List<string> MakeGetMethodBody(AutogenerationMethodInformation methodInfo)
+            => GetMethodBody.Create(methodInfo).ToString();
+        
+        private static List<string> MakePostMethodBody(AutogenerationMethodInformation methodInfo)
+            => PostMethodBody.Create(methodInfo).ToString();
 
         private static string SwapPrimitive(Type type)
-        {
-            var name = type.Name;
-            if (_primitiveMatches.ContainsKey(name))
-            {
-                return _primitiveMatches[type.Name];
-            }
-
-            return type.Name;
-        }
-
-        //probably not needed?
-        private static string MakeMethodReturnSnippetByTypeWithoutPayload(AutogeneratedMethodType type, string postpend)
-            => type switch
-        { 
-            AutogeneratedMethodType.GET => $"return this.GetAsync{postpend}",
-            AutogeneratedMethodType.POST => $"return this.PostAsync{postpend}",
-            _ => ""
-        };
+            => PrimitiveHelper.SwapPrimitive(type);
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
             => returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
-
-        private static string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
-        {
-            var returnStr = returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}, " : "<";
-            return $"{returnStr}{(payloadType != typeof(void) ? $"{SwapPrimitive(payloadType)}" : "")}>";
-        }
     }
 }
