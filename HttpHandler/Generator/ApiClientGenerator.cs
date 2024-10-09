@@ -2,17 +2,42 @@
 
 namespace SSHC.Generator
 {
-    public static class ApiClientGenerator
+    public class ApiClientGenerator(GeneratorArguments generatorArguments)
     {
-        public static void Generate(Assembly controllerAssembly, bool save = true) //support multiple assemblies
+        private GeneratorArguments _args = generatorArguments;
+        public void Generate() 
         {
+            var classFilePath = DirectoryPig.GetFileDirectory(typeof(ApiClientGenerator), _args.FileNameMatchesClassName);
+            Console.WriteLine(classFilePath);
+            return;
+
+            var mappings = _args.FileMappings;
+            if (mappings.Count == 0) { return; }
+
+            for (int i = 0; i < mappings.Count; i++)
+            {
+                var mapping = mappings.ElementAt(i);
+                Assembly? assembly = Assembly.GetAssembly(mapping.Key);
+                if (assembly is null)
+                {
+                    //print
+                    continue;
+                }
+
+                Generate(assembly, _args, i);
+            }
+        } 
+
+        private static void Generate(Assembly controllerAssembly, GeneratorArguments args, int index)
+        {
+            var location = args.FileMappings.ElementAt(index).Value;
             foreach (var info in ControllerInformationCollector.Collect(controllerAssembly).Where(i => i is not null))
             {
                 string fileContent = GenerateApiClient(info!);
                 string fileName = $"{info!.ControllerRoute}ApiClient.cs";
-                string filePath = $"{Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName}\\{fileName}";
+                string filePath = $"{location}";
 
-                if (save && !File.Exists(filePath))
+                if (args.Save && !File.Exists(filePath))
                 {
                     var dir = Path.GetDirectoryName(filePath);
                     Console.WriteLine($"Saving generated ApiClient to {filePath}");
