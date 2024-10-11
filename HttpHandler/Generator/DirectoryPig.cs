@@ -6,7 +6,7 @@
         {
             if (!matching)
             {
-                throw new NotImplementedException($"Advanced class file search not yet supported. " +
+                throw new NotSupportedException($"Advanced class file search not yet supported. " +
                     $"Please make sure the type you use for assembly location matches its file name.");
             }
 

@@ -1,21 +1,31 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reflection;
 
 namespace SSHC.Generator
 {
     public class GeneratorArguments
     {
-        private GeneratorArguments() { }
-        //type is the type of the controller (server), and the string is the location where the new file will be written (client)
-        private Dictionary<Type, string> _fileMappings { get; set; } = new();
-
+        private GeneratorArguments(
+            bool save,
+            bool fileNameMatchesClassName,
+            bool printGeneratedCode
+        ) 
+        {
+            this.Save = save;
+            this.FileNameMatchesClassName = fileNameMatchesClassName;
+            this.PrintGeneratedCode = printGeneratedCode;
+        }
+        private Dictionary<Type, string> _fileMappings { get; set; } = new(); //type = server, string = client
         public ReadOnlyDictionary<Type, string> FileMappings => _fileMappings.AsReadOnly();
         public bool Save { get; set; } = true;
         public bool FileNameMatchesClassName = true;
+        public bool PrintGeneratedCode = false;
 
-        public static GeneratorArguments Create()
+        public static GeneratorArguments Create(
+            bool save = true, 
+            bool fileNameMatchesClassName = true,
+            bool printGeneratedCode = false)
         {
-            var args = new GeneratorArguments();
+            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode);
             return args;
         }
 
@@ -26,30 +36,28 @@ namespace SSHC.Generator
         }
 
         public GeneratorArguments Add(Type controllerType, Type targetAssemblyType)
-            => Add(controllerType, GetLocation(targetAssemblyType));
+        {
+            string? location = GetLocation(targetAssemblyType, this.FileNameMatchesClassName);
+            if (!string.IsNullOrEmpty(location)) 
+            {
+                Add(controllerType, location);
+            }
 
-        public GeneratorArguments Add(Type controllerType, Assembly targetAssembly)
-            => Add(controllerType, GetLocation(targetAssembly));         
+            return this;
+        }
 
         private GeneratorArguments Add(Type type, string location)
         {
+            if (location is null)
+            {
+                throw new ArgumentNullException(nameof(location)); //compiler can't handle "ThrowIfNull()" yet, even though linter tell you to use it
+            }
+            
             _fileMappings[type] = location;
             return this;
         }
 
-        private static string GetLocation(Type type)
-        {
-            var assembly = Assembly.GetAssembly(type);
-            if (assembly is null)
-            {
-                throw new ArgumentException(
-                    $"Assembly for given type {type.FullName} could not be resolved");
-            }
-
-            return GetLocation(assembly);
-        }
-
-        private static string GetLocation(Assembly assembly)
-            => assembly.Location;
+        private static string? GetLocation(Type type, bool fileNameMatchesClassName)
+            => DirectoryPig.GetFileDirectory(type, fileNameMatchesClassName); //oink oink
     }
 }

@@ -19,20 +19,20 @@ namespace SSHC.Generator
 
         private static AutogenerationInformation? CollectController(Type type)
         {
-            Console.WriteLine($"Collecting information on ApiClient for {type.FullName}...");
+            //Console.WriteLine($"Collecting information on ApiClient for {type.FullName}...");
             if (!IsValidAnnotatedApiController(type))
             {
-                Console.WriteLine($"{type.Name} is not an AspNetCore.ApiController. Cannot generate ApiClient");
-                return null;
+                throw new ArgumentException($"{type.Name} is not an AspNetCore.ApiController. Cannot generate ApiClient");
             }
 
             var info = new AutogenerationInformation(
+                type,
                 type.Name,
                 GetControllerRoute(type)
             );
 
             info.Methods = CollectMethods(type, info).ToList();
-            Console.WriteLine($"Information on {info.ControllerName} has been collected...");
+            //Console.WriteLine($"Information on {info.ControllerName} has been collected...");
             return info;
         }
 
