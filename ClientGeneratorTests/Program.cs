@@ -16,13 +16,6 @@ internal class Program
             //print error, print info
         }
 
-
-        //command line arguments for conversion => if no arguments are given, print stuff
-        //command line argument for interactive mode also, which allows generation in the terminal as a simple command line app
-        //Console.WriteLine("---------------------");
-        //Console.WriteLine("Starting generator...");
-        //Console.WriteLine("---------------------");
-
         var controllerAssembly = Assembly.GetAssembly(typeof(TestController));
         GeneratorArguments generatorArguments = GeneratorArguments
             .Create(save: false)
@@ -35,9 +28,5 @@ internal class Program
 
         ApiClientGenerator generator = new(generatorArguments);
         generator.Generate();
-
-        //Console.WriteLine("---------------------");
-        //Console.WriteLine("Finished generating.");
-        //Console.WriteLine("---------------------");
     }
 }

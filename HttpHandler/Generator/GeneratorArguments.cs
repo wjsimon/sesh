@@ -18,6 +18,7 @@ namespace SSHC.Generator
         public ReadOnlyDictionary<Type, string> FileMappings => _fileMappings.AsReadOnly();
         public bool Save { get; set; } = true;
         public bool FileNameMatchesClassName = true;
+        public bool PrintProgress = true;
         public bool PrintGeneratedCode = false;
 
         public static GeneratorArguments Create(
