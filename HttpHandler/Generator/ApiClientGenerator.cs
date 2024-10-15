@@ -20,7 +20,7 @@ namespace SSHC.Generator
 
         private static IEnumerable<Assembly> CollectAssemblies(GeneratorArguments args, GeneratorTrace trace)
         {
-            var mappings = args.FileMappings;
+            var mappings = args.PathMappings;
             HashSet<Assembly> set = new HashSet<Assembly>();
             if (mappings.Count == 0) { yield break; }
 
@@ -30,11 +30,12 @@ namespace SSHC.Generator
                 Assembly? assembly = Assembly.GetAssembly(mapping.Key);
                 if (assembly is null)
                 {
-                    trace.Add($"Could not find assembly for {mapping.Key}, skipping...");
+                    if (args.PrintProgress) { AddSkipInfo(mapping.Key, trace); }
                     continue;
                 }
                 if (!set.Add(assembly)) 
                 { 
+                    if (args.PrintProgress) { AddDuplicateInfo(mapping.Key, trace); }
                     continue; 
                 }
 
@@ -46,11 +47,11 @@ namespace SSHC.Generator
         {
             foreach (var info in ControllerInformationCollector.Collect(controllerAssembly).Where(i => i is not null))
             {
-                if (!args.FileMappings.ContainsKey(info!.ControllerType)) { continue; }
+                if (!args.PathMappings.ContainsKey(info!.ControllerType)) { continue; }
 
-                string fileContent = GenerateApiClient(info!, trace);
+                string fileContent = GenerateApiClient(info!, GetNativeNamespace(args.TypeMappings[info!.ControllerType]), trace);
                 string fileName = $"{info!.ControllerRoute}ApiClient.cs";
-                string filePath = $"{args.FileMappings[info!.ControllerType]}";
+                string filePath = $"{args.PathMappings[info!.ControllerType]}";
 
                 if (args.PrintGeneratedCode) { trace.Add(fileContent); }
 
@@ -63,15 +64,20 @@ namespace SSHC.Generator
             }
         }
 
-        private static string GenerateApiClient(AutogenerationInformation generationInformation, GeneratorTrace trace)
+        private static string GenerateApiClient(AutogenerationInformation info, Type targetType, GeneratorTrace trace)
+            => GenerateApiClient(info, GetNativeNamespace(targetType), trace);
+
+        private static string GenerateApiClient(AutogenerationInformation info, string nameSpace, GeneratorTrace trace)
         {
-            trace.Add($"Starting generation of {generationInformation.ControllerName}...");
+            trace.Add($"Starting generation of {info.ControllerName}...");
             FormattingClassGenerator generator = new();
 
-            generator.AddNamespace($"TestSpace");
-            generator.AddClass(generationInformation);
-            generator.AddGetOnlyProperty(typeof(string), "ApiControllerName", generationInformation.ControllerName);
-            foreach (var method in generationInformation.Methods)
+            generator
+                .AddNamespace(nameSpace)
+                .AddClass(info)
+                .AddGetOnlyProperty(typeof(string), "ApiControllerName", info.ControllerName);
+
+            foreach (var method in info.Methods)
             {
                 generator.AddPublicMethod(method);
             }
@@ -82,5 +88,29 @@ namespace SSHC.Generator
 
         private static void SaveFile(string fileName, string fileContent)
             => File.WriteAllText(fileName, fileContent);
+
+        private static void AddSkipInfo(Type type, GeneratorTrace trace)
+        {
+            trace.Add($"Could not find assembly for {type}, skipping...");
+
+            AutogenerationInformation info = ControllerInformationCollector.MakeInfo(type);
+            info.AutogenerationResult = AutogenerationResult.Skipped;
+            info.Reason = $"Could not find assembly for {type}";
+        }
+
+        private static void AddDuplicateInfo(Type type, GeneratorTrace trace)
+        {
+            trace.Add($"{type} was already generated, skipping...");
+
+            AutogenerationInformation info = ControllerInformationCollector.MakeInfo(type);
+            info.AutogenerationResult = AutogenerationResult.Skipped;
+            info.Reason = $"{type} was already generated";
+        }
+
+        private static string GetNativeNamespace(Type type)
+        {
+            if (string.IsNullOrEmpty(type.FullName)) { return string.Empty; }
+            return string.Join('.', type.FullName.Split('.')[..^1]);
+        }
     }
 }

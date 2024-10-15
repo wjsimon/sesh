@@ -14,8 +14,12 @@ namespace SSHC.Generator
             this.FileNameMatchesClassName = fileNameMatchesClassName;
             this.PrintGeneratedCode = printGeneratedCode;
         }
-        private Dictionary<Type, string> _fileMappings { get; set; } = new(); //type = server, string = client
-        public ReadOnlyDictionary<Type, string> FileMappings => _fileMappings.AsReadOnly();
+
+        private Dictionary<Type, string> _pathMappings { get; set; } = new(); //type = server, string = client
+        private Dictionary<Type, Type> _typeMappings { get; set; } = new();
+        public ReadOnlyDictionary<Type, string> PathMappings => _pathMappings.AsReadOnly();
+        public ReadOnlyDictionary<Type, Type> TypeMappings => _typeMappings.AsReadOnly();
+
         public bool Save { get; set; } = true;
         public bool FileNameMatchesClassName = true;
         public bool PrintProgress = true;
@@ -42,6 +46,7 @@ namespace SSHC.Generator
             if (!string.IsNullOrEmpty(location)) 
             {
                 Add(controllerType, location);
+                _typeMappings.TryAdd(controllerType, targetAssemblyType);
             }
 
             return this;
@@ -54,7 +59,7 @@ namespace SSHC.Generator
                 throw new ArgumentNullException(nameof(location)); //compiler can't handle "ThrowIfNull()" yet, even though linter tell you to use it
             }
             
-            _fileMappings[type] = location;
+            _pathMappings[type] = location;
             return this;
         }
 

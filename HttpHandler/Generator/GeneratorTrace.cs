@@ -3,12 +3,18 @@
     internal class GeneratorTrace
     {
         private List<string> _trace = new();
+        private List<AutogenerationInformation> _genStack = new();
+        private int _fileCount;
 
+        public void Add(AutogenerationInformation info)
+            => _genStack.Add(info);
+        
+        public void Add(IEnumerable<AutogenerationInformation> info)
+            => _genStack.AddRange(info);
+        
         public void Add(string trace)
-        {
-            _trace.Add(trace);
-        }
-
+            => _trace.Add(trace);
+        
         public void PrintHeader()
         {
             Add($"===================================");
@@ -40,6 +46,13 @@
 
             Console.Write(trace + "\r\n");
             return trace;
+        }
+
+        public virtual string PrintResult()
+        {
+            if (!_genStack.Any()) { return string.Empty; }
+
+            return string.Empty;
         }
     }
 }
