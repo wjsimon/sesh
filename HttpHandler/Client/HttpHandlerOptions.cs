@@ -1,9 +1,10 @@
 ﻿using System.Text.Json;
 
-namespace SSHC
+namespace SSHC.Client
 {
     public class HttpHandlerOptions
     {
         public JsonSerializerOptions? JsonSerializerOptions { get; set; } = null;
+        public bool ThrowOnStatusCodeUnsuccessful { get; set; } = true;
     }
 }

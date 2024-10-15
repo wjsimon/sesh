@@ -1,0 +1,124 @@
+﻿using System.Reflection;
+
+namespace SSHC.Generator
+{
+    public class ApiClientGenerator(GeneratorArguments generatorArguments)
+    {
+        private GeneratorArguments _args = generatorArguments;
+        private GeneratorTrace _trace = new();
+
+        public void Generate()
+        {
+            if (_args.PrintProgress) { _trace.PrintHeader(); }
+            foreach (var assembly in CollectAssemblies(_args, _trace))
+            {
+                Generate(assembly, _args, _trace);
+                if (_args.PrintProgress) { _trace.Flush(); }
+            }
+
+            if (_args.PrintProgress) 
+            {
+                _trace.PrintSummary();
+                _trace.PrintFooter();
+            }
+        }
+
+        private static IEnumerable<Assembly> CollectAssemblies(GeneratorArguments args, GeneratorTrace trace)
+        {
+            var mappings = args.PathMappings;
+            HashSet<Assembly> set = new HashSet<Assembly>();
+            if (mappings.Count == 0) { yield break; }
+
+            for (int i = 0; i < mappings.Count; i++)
+            {
+                var mapping = mappings.ElementAt(i);
+                Assembly? assembly = Assembly.GetAssembly(mapping.Key);
+                if (assembly is null)
+                {
+                    if (args.PrintProgress) { AddSkipInfo(mapping.Key, trace); }
+                    continue;
+                }
+                if (!set.Add(assembly)) 
+                { 
+                    if (args.PrintProgress) { AddDuplicateInfo(mapping.Key, trace); }
+                    continue; 
+                }
+
+                yield return assembly;
+            }
+        }
+
+        private static void Generate(Assembly controllerAssembly, GeneratorArguments args, GeneratorTrace trace)
+        {
+            foreach (var info in ControllerInformationCollector.Collect(controllerAssembly).Where(i => i is not null))
+            {
+                if (!args.PathMappings.ContainsKey(info!.ControllerType)) { continue; }
+
+                string fileContent = GenerateApiClient(info!, GetNativeNamespace(args.TypeMappings[info!.ControllerType]), trace);
+                string fileName = $"{info!.ControllerRoute}ApiClient.cs";
+                string filePath = $"{args.PathMappings[info!.ControllerType]}";
+
+                if (args.PrintProgress) {  trace.Add(info); }
+                if (args.PrintGeneratedCode) { trace.Add(fileContent);}
+
+                if (args.Save && !File.Exists(filePath))
+                {
+                    var dir = Path.GetDirectoryName(filePath);
+                    SaveFile(filePath, fileContent);
+                    trace.Add($"Succesfully saved generated ApiClient for {info!.ControllerType} to {filePath}");
+                }
+            }
+        }
+
+        private static string GenerateApiClient(AutogenerationInformation info, Type targetType, GeneratorTrace trace)
+            => GenerateApiClient(info, GetNativeNamespace(targetType), trace);
+
+        private static string GenerateApiClient(AutogenerationInformation info, string nameSpace, GeneratorTrace trace)
+        {
+            trace.Add($"Starting generation of {info.ControllerName}...");
+            FormattingClassGenerator generator = new();
+
+            generator
+                .AddNamespace(nameSpace)
+                .AddClass(info)
+                .AddGetOnlyProperty(typeof(string), "ApiControllerName", info.ControllerName);
+
+            foreach (var method in info.Methods)
+            {
+                generator.AddPublicMethod(method);
+            }
+
+            string fileContent = generator.Generate();
+            info.AutogenerationResult = AutogenerationResult.Success;
+
+            return fileContent;
+        }
+
+        private static void SaveFile(string fileName, string fileContent)
+            => File.WriteAllText(fileName, fileContent);
+
+        private static void AddSkipInfo(Type type, GeneratorTrace trace)
+        {
+            trace.Add($"Could not find assembly for {type}, skipping...");
+
+            AutogenerationInformation info = ControllerInformationCollector.MakeInfo(type);
+            info.AutogenerationResult = AutogenerationResult.Skipped;
+            info.Reason = $"Could not find assembly for {type}";
+        }
+
+        private static void AddDuplicateInfo(Type type, GeneratorTrace trace)
+        {
+            trace.Add($"{type} was already generated, skipping...");
+
+            AutogenerationInformation info = ControllerInformationCollector.MakeInfo(type);
+            info.AutogenerationResult = AutogenerationResult.Skipped;
+            info.Reason = $"{type} was already generated";
+        }
+
+        private static string GetNativeNamespace(Type type)
+        {
+            if (string.IsNullOrEmpty(type.FullName)) { return string.Empty; }
+            return string.Join('.', type.FullName.Split('.')[..^1]);
+        }
+    }
+}

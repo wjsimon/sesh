@@ -1,34 +1,39 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Runtime.CompilerServices;
 
-namespace SSHC
+namespace SSHC.Client
 {
     public abstract class ApiClient
     {
         public ApiClient(HttpClient httpClient)
         {
-            ArgumentNullException.ThrowIfNull(httpClient);
-            this.httpHandler = new HttpHandler(httpClient);
+            _httpHandler = new HttpHandler(httpClient);
         }
 
-        protected readonly IHttpHandler httpHandler;
-        protected abstract string ApiControllerName { get; init; }
+        public ApiClient(IHttpHandler httpHandler)
+        {
+            this._httpHandler = httpHandler;
+        }
 
+        protected readonly IHttpHandler _httpHandler;
+        protected abstract string ApiControllerName { get; init; }
         protected virtual Task<TValue?> GetAsync<TValue>(string? requestUri)
-            => this.httpHandler.GetAsync<TValue>(requestUri);
+            => _httpHandler.GetAsync<TValue>(requestUri);
         protected virtual Task<TResult?> PostAsync<TValue, TResult>(string? requestUri, TValue? payload)
-            => this.httpHandler.PostAsync<TValue, TResult>(requestUri, payload);
+            => _httpHandler.PostAsync<TValue, TResult>(requestUri, payload);
         protected virtual Task<TResult?> PostAsync<TResult>(string? requestUri)
-            => this.httpHandler.PostAsync<TResult>(requestUri);
+            => _httpHandler.PostAsync<TResult>(requestUri);
+        protected virtual Task PostAsync<TValue>(string? requestUri, TValue? payload)
+            => _httpHandler.PostAsync<TValue>(requestUri, payload);
 
         protected virtual string Uri([CallerMemberName] string? caller = null)
         {
-            if (caller is null) { throw new ArgumentException($"{this.GetType().Name}.{nameof(Uri)} requires non-null caller via CallerMemberName Attribute"); }
-            return $"{this.ApiControllerName}/{AdjustCallerMemberName(caller)}";
+            if (caller is null) { throw new ArgumentException($"{GetType().Name}.{nameof(Uri)} requires non-null caller via CallerMemberName Attribute"); }
+            return $"{ApiControllerName}/{AdjustCallerMemberName(caller)}";
         }
 
-        protected virtual string Uri(Dictionary<string, string?> param, [CallerMemberName] string? caller = null)
-            => QueryHelpers.AddQueryString(Uri(caller), param);
+        protected virtual string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
+            => QueryHelpers.AddQueryString(Uri(caller), dict);
 
         protected string Uri(string paramName, string? paramValue, [CallerMemberName] string? caller = null)
         {
