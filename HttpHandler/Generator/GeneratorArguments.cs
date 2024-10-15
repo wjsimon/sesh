@@ -56,7 +56,7 @@ namespace SSHC.Generator
         {
             if (location is null)
             {
-                throw new ArgumentNullException(nameof(location)); //compiler can't handle "ThrowIfNull()" yet, even though linter tell you to use it
+                throw new ArgumentNullException(nameof(location)); //compiler can't handle "ThrowIfNull()" yet
             }
             
             _pathMappings[type] = location;

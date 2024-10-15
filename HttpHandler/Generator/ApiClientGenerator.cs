@@ -15,7 +15,12 @@ namespace SSHC.Generator
                 Generate(assembly, _args, _trace);
                 if (_args.PrintProgress) { _trace.Flush(); }
             }
-            if (_args.PrintProgress) { _trace.PrintFooter(); }
+
+            if (_args.PrintProgress) 
+            {
+                _trace.PrintSummary();
+                _trace.PrintFooter();
+            }
         }
 
         private static IEnumerable<Assembly> CollectAssemblies(GeneratorArguments args, GeneratorTrace trace)
@@ -53,7 +58,8 @@ namespace SSHC.Generator
                 string fileName = $"{info!.ControllerRoute}ApiClient.cs";
                 string filePath = $"{args.PathMappings[info!.ControllerType]}";
 
-                if (args.PrintGeneratedCode) { trace.Add(fileContent); }
+                if (args.PrintProgress) {  trace.Add(info); }
+                if (args.PrintGeneratedCode) { trace.Add(fileContent);}
 
                 if (args.Save && !File.Exists(filePath))
                 {
@@ -83,6 +89,8 @@ namespace SSHC.Generator
             }
 
             string fileContent = generator.Generate();
+            info.AutogenerationResult = AutogenerationResult.Success;
+
             return fileContent;
         }
 
