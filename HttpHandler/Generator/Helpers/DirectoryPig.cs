@@ -1,4 +1,4 @@
-﻿namespace SSHC.Generator
+﻿namespace SSHC.Generator.Helpers
 {
     internal static class DirectoryPig
     {
@@ -12,7 +12,7 @@
 
             string root = GetRoot();
             var files = Directory.GetFiles(root, $"{type.Name}.cs", SearchOption.AllDirectories);
-            
+
             if (files.Length == 0) { return null; }
             return files[0];
         }

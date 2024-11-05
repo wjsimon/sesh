@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SSHC.Generator
+namespace SSHC.Generator.Collection
 {
     internal class AutogenerationCodeContainer
     {
@@ -10,7 +10,7 @@ namespace SSHC.Generator
         private List<string> _publicProperties = new();
         private List<(string, string[])> _publicMethods = new();
 
-        public void AddUsings(IEnumerable<string> usings) 
+        public void AddUsings(IEnumerable<string> usings)
         {
             foreach (string line in usings)
             {
@@ -18,22 +18,22 @@ namespace SSHC.Generator
             }
         }
 
-        public void SetNamespace(string nameSpace) 
+        public void SetNamespace(string nameSpace)
         {
             _namespace = nameSpace;
         }
 
-        public void SetClassDefinition(string classDefinition) 
+        public void SetClassDefinition(string classDefinition)
         {
             _class = classDefinition;
         }
 
-        public void AddPublicPropertyDefintion(string propertyDefinition) 
+        public void AddPublicPropertyDefintion(string propertyDefinition)
         {
             _publicProperties.Add(propertyDefinition);
         }
 
-        public void AddPublicMethodDefinition(string methodDefinition, List<string> methodBody) 
+        public void AddPublicMethodDefinition(string methodDefinition, List<string> methodBody)
         {
             _publicMethods.Add((methodDefinition, methodBody.ToArray()));
         }
@@ -88,10 +88,10 @@ namespace SSHC.Generator
             int opened = 0;
             for (int i = 0; i < lines.Count; i++)
             {
-                if (lines[i] == "{") 
-                { 
+                if (lines[i] == "{")
+                {
                     opened += 1;
-                    lines[i] = PrependSingleIndent(lines[i], opened-1);
+                    lines[i] = PrependSingleIndent(lines[i], opened - 1);
                     continue;
                 }
 

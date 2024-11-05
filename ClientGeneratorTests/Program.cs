@@ -1,7 +1,6 @@
 ﻿using SSHC.Client;
 using SSHC.Controllers;
 using SSHC.Generator;
-using System.Reflection;
 
 internal class Program
 {
@@ -16,7 +15,6 @@ internal class Program
             //print error, print info
         }
 
-        var controllerAssembly = Assembly.GetAssembly(typeof(TestController));
         GeneratorArguments generatorArguments = GeneratorArguments
             .Create(save: false)
             .AddRange(

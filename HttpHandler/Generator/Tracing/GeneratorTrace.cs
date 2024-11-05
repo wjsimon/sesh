@@ -1,9 +1,11 @@
-﻿namespace SSHC.Generator
+﻿using SSHC.Generator.Collection;
+
+namespace SSHC.Generator.Tracing
 {
     internal class GeneratorTrace
     {
-        private List<string> _trace = new();
-        private List<AutogenerationInformation> _genStack = new();
+        private readonly List<string> _trace = [];
+        private readonly List<AutogenerationInformation> _genStack = [];
         private int _fileCount;
         private int _successCount;
         private IEnumerable<AutogenerationInformation>? _failedGenerations;
@@ -11,10 +13,10 @@
 
         public void Add(AutogenerationInformation info)
             => _genStack.Add(info);
-        
+
         public void Add(IEnumerable<AutogenerationInformation> info)
             => _genStack.AddRange(info);
-        
+
         public void Add(string trace)
             => _trace.Add(trace);
 
@@ -56,13 +58,13 @@
 
         public virtual string PrintSummary()
         {
-            if (!_genStack.Any()) { return string.Empty; }
+            if (_genStack.Count == 0) { return string.Empty; }
             AggregateSummary();
 
             AddLine();
             AddLine();
             Add($"Successfully generated {_successCount} / {_fileCount}");
-            
+
             if (_skippedGenerations is not null && _skippedGenerations.Any())
             {
                 Add($"{_skippedGenerations.Count()} clients skipped...");
@@ -86,7 +88,7 @@
 
         private void AggregateSummary()
         {
-            if (!_genStack.Any()) { return; }
+            if (_genStack.Count == 0) { return; }
 
             _fileCount = _genStack.Count;
             _successCount = _genStack.Where(i => i.AutogenerationResult == AutogenerationResult.Success).Count();

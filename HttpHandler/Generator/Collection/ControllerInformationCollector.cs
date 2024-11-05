@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SSHC.Generator.Collection.Methods;
 using System.Reflection;
 
-namespace SSHC.Generator
+namespace SSHC.Generator.Collection
 {
     internal static class ControllerInformationCollector
     {
@@ -59,7 +60,7 @@ namespace SSHC.Generator
         }
 
         public static AutogenerationInformation MakeInfo(Type type)
-            => new (type, type.Name, GetControllerRoute(type));
+            => new(type, type.Name, GetControllerRoute(type));
 
         private static bool IsValidAnnotatedApiController(Type autogeneratableType)
         {
@@ -88,8 +89,8 @@ namespace SSHC.Generator
 
         private static IEnumerable<MethodInfo> GetAllApiMethodsFromController(Type controllerType)
             => controllerType.GetMethods().Where(IsValidAnnotatedApiMethod);
-            
-        
+
+
 
         private static bool IsValidAnnotatedApiMethod(MethodInfo method)
         {
@@ -123,8 +124,8 @@ namespace SSHC.Generator
 
         private static List<(Type Type, string Name)> GetControllerMethodParameters(MethodInfo controllerMethod)
         {
-            var parameters = controllerMethod.GetParameters().Where(p => 
-                p.IsDefined(typeof(FromQueryAttribute)) || 
+            var parameters = controllerMethod.GetParameters().Where(p =>
+                p.IsDefined(typeof(FromQueryAttribute)) ||
                 p.IsDefined(typeof(FromBodyAttribute))
             );
 

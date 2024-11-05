@@ -1,8 +1,8 @@
-﻿namespace SSHC.Generator
+﻿namespace SSHC.Generator.Collection.Methods
 {
     internal abstract class MethodBodyDescription
     {
-        public MethodBodyDescription(AutogenerationMethodInformation methodInfo) 
+        public MethodBodyDescription(AutogenerationMethodInformation methodInfo)
         {
             MethodInfo = methodInfo;
             Make();
@@ -10,28 +10,29 @@
 
         protected AutogenerationMethodInformation MethodInfo { get; private init; }
         protected Type ReturnType => MethodInfo.ReturnType;
-        protected int ParameterCount => MethodInfo.ParametersMetaData.Count();
+        protected int ParameterCount => MethodInfo.ParametersMetaData.Count;
         protected bool HasParameters => ParameterCount > 0;
         protected List<(Type Type, string Name)> Parameters => MethodInfo.ParametersMetaData;
 
-        private string _methodPass { get; set; }
-        private string _taskSnippet { get; set; }
-        private string _uri { get; set; }
+        private string? _methodPass;
+        private string? _taskSnippet;
+        private string? _uri;
 
         protected abstract string MakeMethodPass();
         protected abstract string MakeTaskSnippet();
         protected abstract string MakeUri();
         protected virtual List<string> MakeUriDict()
         {
-            if (ParameterCount < 2) { return new(); }
+            if (ParameterCount < 2) { return []; }
             return DictFromTuples(Parameters);
         }
 
-        protected List<string> DictFromTuples(List<(Type Type, string Name)>? parameterValues)
+        protected static List<string> DictFromTuples(List<(Type Type, string Name)>? parameterValues)
         {
-            var lines = new List<string>();
-            lines.Add($"Dictionary<string, string> dict = new();"); //using the newer instance syntax breaks my bracket parsing :(
-            foreach (var value in Parameters)
+            if (parameterValues is null) { return []; }
+
+            List<string> lines = [$"Dictionary<string, string> dict = new();"];
+            foreach (var value in parameterValues)
             {
                 lines.Add($"dict.Add({$"\"{value.Name}\""}, {value.Name}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
             }
@@ -45,10 +46,10 @@
             _taskSnippet = MakeTaskSnippet();
             _uri = MakeUri();
         }
-        protected string MakeUri(string parameterValueName)
+        protected static string MakeUri(string parameterValueName)
             => $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}))";
 
-        protected string MakeUri((string, string) parameterValueNames)
+        protected static string MakeUri((string, string) parameterValueNames)
         {
             return $"(Uri(" +
                 $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1})"}, " +
@@ -56,10 +57,9 @@
                 $"))";
         }
 
-        protected string MakeUri(IEnumerable<string> parameterValueNames)
+        protected static string MakeUri(IEnumerable<string> parameterValueNames)
         {
-            var lines = new List<string>();
-            lines.Add($"Dictionary<string, string> dict = new();");
+            List<string> lines = [$"Dictionary<string, string> dict = new();"];
             foreach (var value in parameterValueNames)
             {
                 lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that

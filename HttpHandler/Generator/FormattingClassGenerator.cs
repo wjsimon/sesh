@@ -1,4 +1,8 @@
-﻿namespace SSHC.Generator
+﻿using SSHC.Generator.Collection;
+using SSHC.Generator.Collection.Methods;
+using SSHC.Generator.Helpers;
+
+namespace SSHC.Generator
 {
     internal class FormattingClassGenerator
     {

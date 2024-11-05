@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using SSHC.Generator.Helpers;
+using System.Collections.ObjectModel;
 
 namespace SSHC.Generator
 {

@@ -1,4 +1,4 @@
-﻿namespace SSHC.Generator
+﻿namespace SSHC.Generator.Helpers
 {
     internal class PrimitiveHelper
     {

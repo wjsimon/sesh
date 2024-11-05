@@ -1,8 +1,10 @@
-﻿namespace SSHC.Generator
+﻿using SSHC.Generator.Collection.Methods;
+
+namespace SSHC.Generator.Collection
 {
     internal record class AutogenerationInformation(
-        Type ControllerType, 
-        string ControllerName, 
+        Type ControllerType,
+        string ControllerName,
         string ControllerRoute)
     {
         public IEnumerable<AutogenerationMethodInformation> Methods = Enumerable.Empty<AutogenerationMethodInformation>();
