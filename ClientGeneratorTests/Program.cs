@@ -5,16 +5,14 @@ using Simons.Generators.Http.Controllers;
 internal class Program
 {
     private static void Main(string[] args)
-    {
-        GeneratorArguments generatorArguments = 
+    {            
+        ApiClientGenerator.Generate(
             GeneratorArguments
             .Create(save: false)
             .AddRange([
                 (typeof(TestController), typeof(ApiClient)),
                 (typeof(AutogenerateController), typeof(AutogenerateController))
-            ]);
-
-        ApiClientGenerator generator = new(generatorArguments);
-        generator.Generate();
+            ])
+        );
     }
 }

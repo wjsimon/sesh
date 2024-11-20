@@ -46,10 +46,10 @@ namespace Simons.Http
             return QueryHelpers.AddQueryString(Uri(caller), dict);
         }
 
-        protected virtual string AdjustCallerMemberName(string caller) //check overrides if you wan't to understand what this does
+        protected virtual string AdjustCallerMemberName(string? caller) //check overrides if you wan't to understand what this does
         {
             EnsureValidCaller(caller);
-            return caller;
+            return caller!;
         }
 
         private void EnsureValidCaller(string? caller, [CallerMemberName] string? consumer = null)

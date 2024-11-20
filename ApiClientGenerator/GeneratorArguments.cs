@@ -8,12 +8,14 @@ namespace Simons.Generators.Http
         private GeneratorArguments(
             bool save,
             bool fileNameMatchesClassName,
-            bool printGeneratedCode
-        ) 
+            bool printGeneratedCode,
+            bool printProgress
+        )
         {
             this.Save = save;
             this.FileNameMatchesClassName = fileNameMatchesClassName;
             this.PrintGeneratedCode = printGeneratedCode;
+            this.PrintProgress = printProgress;
         }
 
         private Dictionary<Type, string> _pathMappings { get; set; } = new(); //type = server, string = client
@@ -21,17 +23,18 @@ namespace Simons.Generators.Http
         public ReadOnlyDictionary<Type, string> PathMappings => _pathMappings.AsReadOnly();
         public ReadOnlyDictionary<Type, Type> TypeMappings => _typeMappings.AsReadOnly();
 
-        public bool Save { get; set; } = true;
-        public bool FileNameMatchesClassName = true;
-        public bool PrintProgress = true;
-        public bool PrintGeneratedCode = false;
+        public bool Save { get; private set; }
+        public bool FileNameMatchesClassName { get; private set; }
+        public bool PrintGeneratedCode { get; private set; }
+        public bool PrintProgress { get; private set; }
 
         public static GeneratorArguments Create(
             bool save = true, 
             bool fileNameMatchesClassName = true,
-            bool printGeneratedCode = false)
+            bool printGeneratedCode = false,
+            bool printProgress = true)
         {
-            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode);
+            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode, printProgress);
             return args;
         }
 

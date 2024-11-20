@@ -4,31 +4,30 @@ using System.Reflection;
 
 namespace Simons.Generators.Http
 {
-    public class ApiClientGenerator(GeneratorArguments generatorArguments)
+    public static class ApiClientGenerator
     {
-        private GeneratorArguments _args = generatorArguments;
-        private GeneratorTrace _trace = new();
-
-        public void Generate()
+        public static void Generate(GeneratorArguments args)
         {
-            if (_args.PrintProgress) { _trace.PrintHeader(); }
-            foreach (var assembly in CollectAssemblies(_args, _trace))
+            GeneratorTrace trace = new();
+            if (args.PrintProgress) { trace.PrintHeader(); }
+            foreach (var assembly in CollectAssemblies(args, trace))
             {
-                Generate(assembly, _args, _trace);
-                if (_args.PrintProgress) { _trace.Flush(); }
+                Generate(assembly, args, trace);
+                if (args.PrintProgress) { trace.Flush(); }
             }
 
-            if (_args.PrintProgress) 
+            if (args.PrintProgress) 
             {
-                _trace.PrintSummary();
-                _trace.PrintFooter();
+                trace.PrintSummary();
+                trace.PrintFooter();
             }
         }
 
         private static IEnumerable<Assembly> CollectAssemblies(GeneratorArguments args, GeneratorTrace trace)
         {
             var mappings = args.PathMappings;
-            HashSet<Assembly> set = new HashSet<Assembly>();
+            HashSet<Assembly> set = [];
+
             if (mappings.Count == 0) { yield break; }
 
             for (int i = 0; i < mappings.Count; i++)
@@ -56,7 +55,7 @@ namespace Simons.Generators.Http
             {
                 if (!args.PathMappings.ContainsKey(info!.ControllerType)) { continue; }
 
-                string fileContent = GenerateApiClient(info!, GetNativeNamespace(args.TypeMappings[info!.ControllerType]), trace);
+                string fileContent = GenerateApiClient(info!, args.TypeMappings[info!.ControllerType], trace);
                 string fileName = $"{info!.ControllerRoute}ApiClient.cs";
                 string filePath = $"{args.PathMappings[info!.ControllerType]}";
 
