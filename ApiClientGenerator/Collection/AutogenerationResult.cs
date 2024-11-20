@@ -1,4 +1,4 @@
-﻿namespace SSHC.Generator.Collection
+﻿namespace Simons.Generators.Http.Collection
 {
     internal enum AutogenerationResult
     {

@@ -1,6 +1,6 @@
-﻿using SSHC.Generator.Collection;
+﻿using Simons.Generators.Http.Collection;
 
-namespace SSHC.Generator.Tracing
+namespace Simons.Generators.Http.Tracing
 {
     internal class GeneratorTrace
     {

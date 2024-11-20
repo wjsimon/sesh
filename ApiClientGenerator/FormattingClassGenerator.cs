@@ -1,13 +1,12 @@
-﻿using SSHC.Generator.Collection;
-using SSHC.Generator.Collection.Methods;
-using SSHC.Generator.Helpers;
+﻿using Simons.Generators.Http.Collection;
+using Simons.Generators.Http.Collection.Methods;
+using Simons.Generators.Http.Helpers;
 
-namespace SSHC.Generator
+namespace Simons.Generators.Http
 {
     internal class FormattingClassGenerator
     {
         private AutogenerationCodeContainer _container = new();
-
         public FormattingClassGenerator AddUsings(IEnumerable<string> usings)
         {
             _container.AddUsings(usings);

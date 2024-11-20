@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SSHC.Generator.Collection.Methods;
+using Simons.Generators.Http.Collection.Methods;
 using System.Reflection;
 
-namespace SSHC.Generator.Collection
+namespace Simons.Generators.Http.Collection
 {
     internal static class ControllerInformationCollector
     {

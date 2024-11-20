@@ -1,7 +1,7 @@
-﻿using SSHC.Generator.Helpers;
+﻿using Simons.Generators.Http.Helpers;
 using System.Collections.ObjectModel;
 
-namespace SSHC.Generator
+namespace Simons.Generators.Http
 {
     public class GeneratorArguments
     {

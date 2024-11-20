@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Runtime.CompilerServices;
 
-namespace SSHC.Client
+namespace Simons.Http
 {
     public abstract class ApiClient
     {

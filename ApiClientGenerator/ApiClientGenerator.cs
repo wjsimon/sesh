@@ -1,8 +1,8 @@
-﻿using SSHC.Generator.Collection;
-using SSHC.Generator.Tracing;
+﻿using Simons.Generators.Http.Collection;
+using Simons.Generators.Http.Tracing;
 using System.Reflection;
 
-namespace SSHC.Generator
+namespace Simons.Generators.Http
 {
     public class ApiClientGenerator(GeneratorArguments generatorArguments)
     {

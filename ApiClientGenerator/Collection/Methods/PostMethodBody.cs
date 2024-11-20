@@ -1,6 +1,6 @@
-﻿using SSHC.Generator.Helpers;
+﻿using Simons.Generators.Http.Helpers;
 
-namespace SSHC.Generator.Collection.Methods
+namespace Simons.Generators.Http.Collection.Methods
 {
     internal sealed class PostMethodBody : MethodBodyDescription
     {

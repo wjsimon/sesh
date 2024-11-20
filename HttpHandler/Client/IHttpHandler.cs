@@ -1,4 +1,4 @@
-﻿namespace SSHC.Client
+﻿namespace Simons.Http
 {
     public interface IHttpHandler
     {

@@ -1,6 +1,6 @@
-﻿using SSHC.Generator.Collection.Methods;
+﻿using Simons.Generators.Http.Collection.Methods;
 
-namespace SSHC.Generator.Collection
+namespace Simons.Generators.Http.Collection
 {
     internal record class AutogenerationInformation(
         Type ControllerType,

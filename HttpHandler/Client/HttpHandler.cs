@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace SSHC.Client
+namespace Simons.Http
 {
     internal sealed class HttpHandler(HttpClient http, HttpHandlerOptions? options = null) : IHttpHandler
     {

@@ -1,4 +1,4 @@
-﻿namespace SSHC.Generator.Helpers
+﻿namespace Simons.Generators.Http.Helpers
 {
     internal class PrimitiveHelper
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace SSHC.Generator.Collection
+namespace Simons.Generators.Http.Collection
 {
     internal class AutogenerationCodeContainer
     {

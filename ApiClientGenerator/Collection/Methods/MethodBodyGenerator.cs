@@ -1,4 +1,4 @@
-﻿namespace SSHC.Generator.Collection.Methods
+﻿namespace Simons.Generators.Http.Collection.Methods
 {
     internal class MethodBodyGenerator
     {

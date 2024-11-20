@@ -1,4 +1,4 @@
-﻿namespace SSHC.Generator
+﻿namespace Simons.Generators.Http
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class ReturnsAttribute(Type returnType) : Attribute
