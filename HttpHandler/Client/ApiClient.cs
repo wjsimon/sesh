@@ -5,18 +5,16 @@ namespace Simons.Http
 {
     public abstract class ApiClient
     {
-        public ApiClient(HttpClient httpClient)
-        {
-            _httpHandler = new HttpHandler(httpClient);
-        }
-
         public ApiClient(IHttpHandler httpHandler)
         {
-            this._httpHandler = httpHandler;
+            _httpHandler = httpHandler;
         }
+
+        public ApiClient(HttpClient httpClient) : this(new HttpHandler(httpClient)) { }
 
         protected readonly IHttpHandler _httpHandler;
         protected abstract string ApiControllerName { get; init; }
+        
         protected virtual Task<TValue?> GetAsync<TValue>(string? requestUri)
             => _httpHandler.GetAsync<TValue>(requestUri);
         protected virtual Task<TResult?> PostAsync<TValue, TResult>(string? requestUri, TValue? payload)
@@ -28,35 +26,35 @@ namespace Simons.Http
 
         protected virtual string Uri([CallerMemberName] string? caller = null)
         {
-            if (caller is null) { throw new ArgumentException($"{GetType().Name}.{nameof(Uri)} requires non-null caller via CallerMemberName Attribute"); }
+            EnsureValidCaller(caller);
             return $"{ApiControllerName}/{AdjustCallerMemberName(caller)}";
         }
 
-        protected virtual string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
-            => QueryHelpers.AddQueryString(Uri(caller), dict);
-
-        protected string Uri(string paramName, string? paramValue, [CallerMemberName] string? caller = null)
+        protected string Uri([CallerMemberName] string? caller = null, params (string, string?)[] parameters)
         {
-            Dictionary<string, string?> param = new()
-            {
-                { paramName, paramValue }
-            };
+            EnsureValidCaller(caller);
+            Dictionary<string, string?> param = new([
+                ..parameters.Select(p => new KeyValuePair<string, string?>(p.Item1, p.Item2))
+            ]);
 
             return Uri(param, caller);
         }
 
-        protected string Uri((string, string) names, (string?, string?) values, [CallerMemberName] string? caller = null)
+        protected virtual string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
         {
-            Dictionary<string, string?> param = new()
-            {
-                { names.Item1, values.Item1 },
-                { names.Item2, values.Item2 }
-            };
-
-            return Uri(param, caller);
+            EnsureValidCaller(caller);
+            return QueryHelpers.AddQueryString(Uri(caller), dict);
         }
 
         protected virtual string AdjustCallerMemberName(string caller) //check overrides if you wan't to understand what this does
-            => caller;
+        {
+            EnsureValidCaller(caller);
+            return caller;
+        }
+
+        private void EnsureValidCaller(string? caller, [CallerMemberName] string? consumer = null)
+        {
+            if (caller is null) { throw new ArgumentException($"{GetType().Name}.{consumer} requires non-null caller Attribute"); }
+        }
     }
 }
