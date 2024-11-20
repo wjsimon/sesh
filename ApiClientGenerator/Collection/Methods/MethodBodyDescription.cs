@@ -1,4 +1,4 @@
-﻿namespace Simons.Generators.Http.Collection.Methods
+﻿namespace Simons.Generators.ApiClient.Collection.Methods
 {
     internal abstract class MethodBodyDescription
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Simons.Generators.Http.Collection.Methods;
+using Simons.Generators.ApiClient.Collection.Methods;
 using System.Reflection;
 
-namespace Simons.Generators.Http.Collection
+namespace Simons.Generators.ApiClient.Collection
 {
     internal static class ControllerInformationCollector
     {

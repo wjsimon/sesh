@@ -1,4 +1,4 @@
-﻿namespace Simons.Generators.Http
+﻿namespace Simons.Generators.ApiClient
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class ReturnsAttribute(Type returnType) : Attribute

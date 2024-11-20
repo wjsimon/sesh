@@ -1,6 +1,6 @@
 ﻿using Simons.Http;
-using Simons.Generators.Http;
-using Simons.Generators.Http.Controllers;
+using Simons.Generators.ApiClient;
+using Simons.Generators.ApiClient.Controllers;
 
 internal class Program
 {
@@ -8,11 +8,16 @@ internal class Program
     {            
         ApiClientGenerator.Generate(
             GeneratorArguments
-            .Create(save: false)
+            .Create(
+                save: false, 
+                printGeneratedCode: true)
             .AddRange([
-                (typeof(TestController), typeof(ApiClient)),
-                (typeof(AutogenerateController), typeof(AutogenerateController))
+                (typeof(TestController), typeof(ApiClient))
+                //(typeof(AutogenerateController), typeof(AutogenerateController))
             ])
+            //.WithPartials([
+            //    (typeof(TestController))
+            //])
         );
     }
 }

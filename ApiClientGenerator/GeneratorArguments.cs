@@ -1,7 +1,7 @@
-﻿using Simons.Generators.Http.Helpers;
+﻿using Simons.Generators.ApiClient.Helpers;
 using System.Collections.ObjectModel;
 
-namespace Simons.Generators.Http
+namespace Simons.Generators.ApiClient
 {
     public class GeneratorArguments
     {
@@ -18,15 +18,17 @@ namespace Simons.Generators.Http
             this.PrintProgress = printProgress;
         }
 
-        private Dictionary<Type, string> _pathMappings { get; set; } = new(); //type = server, string = client
-        private Dictionary<Type, Type> _typeMappings { get; set; } = new();
+        private Dictionary<Type, string> _pathMappings { get; set; } = []; //type = server, string = client
+        private Dictionary<Type, Type> _typeMappings { get; set; } = []; ////type = server, type = client
+        private HashSet<Type>? _partials;
         public ReadOnlyDictionary<Type, string> PathMappings => _pathMappings.AsReadOnly();
         public ReadOnlyDictionary<Type, Type> TypeMappings => _typeMappings.AsReadOnly();
-
+        
         public bool Save { get; private set; }
         public bool FileNameMatchesClassName { get; private set; }
         public bool PrintGeneratedCode { get; private set; }
         public bool PrintProgress { get; private set; }
+        public bool GeneratePartials { get; private set; }
 
         public static GeneratorArguments Create(
             bool save = true, 
@@ -55,6 +57,26 @@ namespace Simons.Generators.Http
 
             return this;
         }
+
+        public GeneratorArguments WithPartials() 
+            => WithPartials(null);
+
+        public GeneratorArguments WithPartials(params IEnumerable<Type>? controllers)
+        {
+            bool precise = false;
+            if (controllers is not null && controllers.Any()) { precise = true; }
+
+            if (!precise)
+            {
+                _partials = [..controllers];
+            }
+
+            this.GeneratePartials = true;
+            return this;
+        }
+
+        public IEnumerable<Type> GetPartials()
+            => _partials ?? [];
 
         private GeneratorArguments Add(Type type, string location)
         {

@@ -1,8 +1,8 @@
-﻿using Simons.Generators.Http.Collection;
-using Simons.Generators.Http.Collection.Methods;
-using Simons.Generators.Http.Helpers;
+﻿using Simons.Generators.ApiClient.Collection;
+using Simons.Generators.ApiClient.Collection.Methods;
+using Simons.Generators.ApiClient.Helpers;
 
-namespace Simons.Generators.Http
+namespace Simons.Generators.ApiClient
 {
     internal class FormattingClassGenerator
     {
@@ -21,7 +21,7 @@ namespace Simons.Generators.Http
 
         public FormattingClassGenerator AddClass(AutogenerationInformation classInfo)
         {
-            _container.SetClassDefinition($"public class {classInfo.ControllerRoute}ApiClient : ApiClient");
+            _container.SetClassDefinition($"public{(classInfo.GenerateAsPartial ? " partial" : "")} class {classInfo.ControllerRoute}ApiClient : ApiClient");
             return this;
         }
 

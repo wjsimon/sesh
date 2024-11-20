@@ -1,11 +1,15 @@
-﻿using Simons.Generators.Http.Collection;
-using Simons.Generators.Http.Tracing;
+﻿using Simons.Generators.ApiClient.Collection;
+using Simons.Generators.ApiClient.Tracing;
 using System.Reflection;
 
-namespace Simons.Generators.Http
+namespace Simons.Generators.ApiClient
 {
     public static class ApiClientGenerator
     {
+        //support for partials
+        //support for returning null or default / empty collections
+        //maybe support some Span<T> tech for the generated clients if there's a sensible way to use it
+
         public static void Generate(GeneratorArguments args)
         {
             GeneratorTrace trace = new();
@@ -55,6 +59,7 @@ namespace Simons.Generators.Http
             {
                 if (!args.PathMappings.ContainsKey(info!.ControllerType)) { continue; }
 
+                info.Apply(args);
                 string fileContent = GenerateApiClient(info!, args.TypeMappings[info!.ControllerType], trace);
                 string fileName = $"{info!.ControllerRoute}ApiClient.cs";
                 string filePath = $"{args.PathMappings[info!.ControllerType]}";

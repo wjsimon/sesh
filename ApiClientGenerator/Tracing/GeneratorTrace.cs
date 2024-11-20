@@ -1,6 +1,6 @@
-﻿using Simons.Generators.Http.Collection;
+﻿using Simons.Generators.ApiClient.Collection;
 
-namespace Simons.Generators.Http.Tracing
+namespace Simons.Generators.ApiClient.Tracing
 {
     internal class GeneratorTrace
     {

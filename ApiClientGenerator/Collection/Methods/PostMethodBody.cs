@@ -1,6 +1,6 @@
-﻿using Simons.Generators.Http.Helpers;
+﻿using Simons.Generators.ApiClient.Helpers;
 
-namespace Simons.Generators.Http.Collection.Methods
+namespace Simons.Generators.ApiClient.Collection.Methods
 {
     internal sealed class PostMethodBody : MethodBodyDescription
     {

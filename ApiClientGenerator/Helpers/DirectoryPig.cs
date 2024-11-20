@@ -1,4 +1,4 @@
-﻿namespace Simons.Generators.Http.Helpers
+﻿namespace Simons.Generators.ApiClient.Helpers
 {
     internal static class DirectoryPig
     {
