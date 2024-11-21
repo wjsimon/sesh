@@ -14,7 +14,7 @@
             Type = type;
             FromBodyIndex = fromBodyIndex;
             ReturnType = returnType;
-            AllowNullReturns = allowNullReturns;
+            AreNullReturnsAllowed = allowNullReturns;
             //this block "sorts" the dictionary to make access of the frombody element much easiert
             if (fromBodyIndex > 0)
             {
@@ -34,7 +34,7 @@
         public List<(Type Type, string Name)> ParametersMetaData { get; init; }
         public int FromBodyIndex { get; init; }
         public Type ReturnType { get; init; }
-        public bool AllowNullReturns { get; init; }
+        public bool AreNullReturnsAllowed { get; init; }
     }
 
 

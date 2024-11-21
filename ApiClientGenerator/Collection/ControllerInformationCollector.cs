@@ -21,7 +21,7 @@ namespace Simons.Generators.ApiClient.Collection
         private static AutogenerationInformation? CollectController(Type type, GeneratorArguments args)
         {
             AutogenerationInformation info = MakeInfo(type);
-            if (args.AllowNullReturns) { info.AllowNullReturns = true; }
+            if (args.AreNullReturnsAllowed) { info.AreNullReturnsAllowed = true; }
             if (!IsValidAnnotatedApiController(type))
             {
                 info.AutogenerationResult = AutogenerationResult.Failure;
@@ -43,7 +43,7 @@ namespace Simons.Generators.ApiClient.Collection
                     GetControllerMethodParameters(method),
                     GetPostFromBodyParameterIndex(method),
                     GetControllerMethodReturnType(method),
-                    info.AllowNullReturns
+                    info.AreNullReturnsAllowed
                 );
 
                 yield return methodInfo;

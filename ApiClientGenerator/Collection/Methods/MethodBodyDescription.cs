@@ -93,7 +93,7 @@ namespace Simons.Generators.ApiClient.Collection.Methods
 
         private string MakeReturnLine()
         {
-            if (MethodInfo.AllowNullReturns)
+            if (MethodInfo.AreNullReturnsAllowed)
             {
                 return $"return {_methodPass}{_taskSnippet}({_uri});";
             }

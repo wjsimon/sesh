@@ -15,7 +15,7 @@ internal class Program
                 (typeof(TestController), typeof(ApiClient)),
                 //(typeof(AutogenerateController), typeof(AutogenerateController))
             ])
-            //.DisableNullable()
+            .AllowNullReturns()
         );
     }
 }

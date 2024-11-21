@@ -10,7 +10,7 @@ namespace Simons.Generators.ApiClient.Collection
         public IEnumerable<AutogenerationMethodInformation> Methods = Enumerable.Empty<AutogenerationMethodInformation>();
         public string NameSpace { get; set; } = string.Empty;
         public bool GenerateAsPartial { get; set; } = false;
-        public bool AllowNullReturns { get; set; } = false;
+        public bool AreNullReturnsAllowed { get; set; } = false;
         public string? PartialInset {  get; set; }
         public AutogenerationResult AutogenerationResult { get; set; } = AutogenerationResult.Success;
         public string Reason { get; set; } = string.Empty;

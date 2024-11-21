@@ -68,7 +68,7 @@ namespace Simons.Generators.ApiClient
 
         private static string TaskSnippetFromMethodReturnAnnotation(AutogenerationMethodInformation methodInfo)
         {
-            if (methodInfo.AllowNullReturns)
+            if (methodInfo.AreNullReturnsAllowed)
             {
                 return methodInfo.ReturnType != typeof(void) ? $"<{SwapPrimitive(methodInfo.ReturnType)}?>" : "";
             }

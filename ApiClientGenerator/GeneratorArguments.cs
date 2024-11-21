@@ -30,7 +30,7 @@ namespace Simons.Generators.ApiClient
         public bool PrintGeneratedCode { get; private set; }
         public bool PrintProgress { get; private set; }
         public bool GeneratePartials { get; private set; }
-        public bool AllowNullReturns { get; private set; }
+        public bool AreNullReturnsAllowed { get; private set; }
 
         public static GeneratorArguments Create(
             bool save = true, 
@@ -80,9 +80,9 @@ namespace Simons.Generators.ApiClient
             return this;
         }
 
-        public GeneratorArguments DisableNullable()
+        public GeneratorArguments AllowNullReturns()
         {
-            AllowNullReturns = true;
+            AreNullReturnsAllowed = true;
             return this;
         }
 
