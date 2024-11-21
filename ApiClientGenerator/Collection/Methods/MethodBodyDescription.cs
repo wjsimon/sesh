@@ -1,4 +1,6 @@
-﻿namespace Simons.Generators.ApiClient.Collection.Methods
+﻿using Simons.Generators.ApiClient.Helpers;
+
+namespace Simons.Generators.ApiClient.Collection.Methods
 {
     internal abstract class MethodBodyDescription
     {
@@ -77,6 +79,39 @@
         }
 
         private string MakeReturnLine()
-            => $"return {_methodPass}{_taskSnippet}({_uri});";
+        {
+            if (MethodInfo.AllowNullReturns)
+            {
+                return $"return {_methodPass}{_taskSnippet}({_uri});";
+            }
+            else
+            {
+                return $"return {_methodPass}{_taskSnippet}({_uri}){MakeNullFallthrough(ReturnType)};";
+            }
+        }
+
+        private string MakeNullFallthrough(Type returnType)
+        {
+            return $" ?? {ReturnTypeNullFallthroughSnippet(returnType)}";
+        }
+
+        private string ReturnTypeNullFallthroughSnippet(Type type)
+        {
+            if (IsEnumerable(type)) { return EnumerableNullFallthrough(); }
+            else { return GenericNullFallthrough(); }
+        }
+
+        private static bool IsEnumerable(Type type)
+            => Array.Exists(
+                type.GetInterfaces(),
+                i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));       
+
+        private static string EnumerableNullFallthrough()
+        {
+            return $"[]";
+        }
+
+        private static string GenericNullFallthrough()
+            => $" default";        
     }
 }

@@ -30,6 +30,7 @@ namespace Simons.Generators.ApiClient
         public bool PrintGeneratedCode { get; private set; }
         public bool PrintProgress { get; private set; }
         public bool GeneratePartials { get; private set; }
+        public bool AllowNullReturns { get; private set; }
 
         public static GeneratorArguments Create(
             bool save = true, 
@@ -76,6 +77,12 @@ namespace Simons.Generators.ApiClient
             _partialInsets = _selectedPartials?.ToDictionary(p => p, p => ApiClientGenerator.DEFAULT_INSET);
 
             this.GeneratePartials = true;
+            return this;
+        }
+
+        public GeneratorArguments DisableNullable()
+        {
+            AllowNullReturns = true;
             return this;
         }
 

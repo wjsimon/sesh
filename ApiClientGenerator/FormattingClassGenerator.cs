@@ -46,8 +46,8 @@ namespace Simons.Generators.ApiClient
 
         private static string MakeMethodDefinition(AutogenerationMethodInformation methodInfo)
         {
-            return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo.ReturnType)} {methodInfo.MethodName}" +
-                   $"({string.Join(", ", methodInfo.ParametersMetaData.Select(tuple => $"{SwapPrimitive(tuple.Type)} {tuple.Name}"))}) ";
+                return $"public Task{TaskSnippetFromMethodReturnAnnotation(methodInfo)} {methodInfo.MethodName}" +
+                       $"({string.Join(", ", methodInfo.ParametersMetaData.Select(tuple => $"{SwapPrimitive(tuple.Type)} {tuple.Name}"))}) ";
         }
 
         private static List<string> MakeMethodBody(AutogenerationMethodInformation methodInfo) => methodInfo.Type switch
@@ -66,7 +66,16 @@ namespace Simons.Generators.ApiClient
         private static string SwapPrimitive(Type type)
             => PrimitiveHelper.SwapPrimitive(type);
 
-        private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
-            => returnType != typeof(void) ? $"<{SwapPrimitive(returnType)}>" : "";
+        private static string TaskSnippetFromMethodReturnAnnotation(AutogenerationMethodInformation methodInfo)
+        {
+            if (methodInfo.AllowNullReturns)
+            {
+                return methodInfo.ReturnType != typeof(void) ? $"<{SwapPrimitive(methodInfo.ReturnType)}?>" : "";
+            }
+            else
+            {
+                return methodInfo.ReturnType != typeof(void) ? $"<{SwapPrimitive(methodInfo.ReturnType)}>" : "";
+            }
+        }
     }
 }

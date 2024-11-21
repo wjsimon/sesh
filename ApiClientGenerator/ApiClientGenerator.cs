@@ -7,7 +7,6 @@ namespace Simons.Generators.ApiClient
     public static class ApiClientGenerator
     {
         public const string DEFAULT_INSET = "generated";
-        //support for partials - done
         //support for returning null or default / empty collections
         //support interface generation
         //maybe support some Span<T> tech for the generated clients if there's a sensible way to use it
@@ -57,7 +56,7 @@ namespace Simons.Generators.ApiClient
 
         private static void Generate(Assembly controllerAssembly, GeneratorArguments args, GeneratorTrace trace)
         {
-            foreach (var info in ControllerInformationCollector.Collect(controllerAssembly).Where(i => i is not null))
+            foreach (var info in ControllerInformationCollector.Collect(controllerAssembly, args).Where(i => i is not null))
             {
                 if (!args.PathMappings.ContainsKey(info!.ControllerType)) { continue; }
 

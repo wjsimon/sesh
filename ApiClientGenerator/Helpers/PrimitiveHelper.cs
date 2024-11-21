@@ -13,7 +13,6 @@
             return type.Name;
         }
 
-
         private static readonly Dictionary<string, string> _primitiveMatches = new Dictionary<string, string>()
         {
             { typeof(string).Name, "string" },
@@ -25,6 +24,7 @@
             { typeof(double).Name, "double" },
             { typeof(void).Name, "void" },
             { typeof(object).Name, "object" },
+            { typeof(byte).Name, "byte" }
         };
     }
 }

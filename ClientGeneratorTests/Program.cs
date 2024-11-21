@@ -15,9 +15,7 @@ internal class Program
                 (typeof(TestController), typeof(ApiClient)),
                 (typeof(AutogenerateController), typeof(AutogenerateController))
             ])
-            //.WithPartials([
-            //    (typeof(TestController))
-            //])
+            //.DisableNullable()
         );
     }
 }

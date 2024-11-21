@@ -30,6 +30,11 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         }
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
-            => returnType != typeof(void) ? $"<{PrimitiveHelper.SwapPrimitive(returnType)}>" : "";
+            => returnType != typeof(void) ? TaskReturnValueSnippet(returnType) : "";
+
+        private static string TaskReturnValueSnippet(Type returnType)
+        {
+            return $"<{PrimitiveHelper.SwapPrimitive(returnType)}>";
+        }
     }
 }
