@@ -6,8 +6,10 @@ namespace Simons.Generators.ApiClient
 {
     public static class ApiClientGenerator
     {
-        //support for partials
+        public const string DEFAULT_INSET = "generated";
+        //support for partials - done
         //support for returning null or default / empty collections
+        //support interface generation
         //maybe support some Span<T> tech for the generated clients if there's a sensible way to use it
 
         public static void Generate(GeneratorArguments args)
@@ -61,7 +63,7 @@ namespace Simons.Generators.ApiClient
 
                 info.Apply(args);
                 string fileContent = GenerateApiClient(info!, args.TypeMappings[info!.ControllerType], trace);
-                string fileName = $"{info!.ControllerRoute}ApiClient.cs";
+                string fileName = MakeFileName(info!);
                 string filePath = $"{args.PathMappings[info!.ControllerType]}";
 
                 if (args.PrintProgress) {  trace.Add(info); }
@@ -69,9 +71,12 @@ namespace Simons.Generators.ApiClient
 
                 if (args.Save && !File.Exists(filePath))
                 {
-                    var dir = Path.GetDirectoryName(filePath);
-                    SaveFile(filePath, fileContent);
+                    SaveFile(fileName, filePath, fileContent);
                     trace.Add($"Succesfully saved generated ApiClient for {info!.ControllerType} to {filePath}");
+                }
+                else
+                {
+                    trace.Add($"{info!.ControllerType} target path: {filePath}\\{fileName}");
                 }
             }
         }
@@ -100,8 +105,19 @@ namespace Simons.Generators.ApiClient
             return fileContent;
         }
 
-        private static void SaveFile(string fileName, string fileContent)
-            => File.WriteAllText(fileName, fileContent);
+        private static string MakeFileName(AutogenerationInformation info)
+        {
+            if (info.GenerateAsPartial) //partial inset cannot be null if GenerateAsPartial is set
+            {
+                return $"{info.ControllerRoute}ApiClient.{info.PartialInset}.cs";
+            }
+            else
+            {
+                return $"{info.ControllerRoute}ApiClient.cs";
+            }
+        }
+        private static void SaveFile(string fileName, string filePath, string fileContent)
+            => File.WriteAllText($"{filePath}\\{fileName}", fileContent);
 
         private static void AddSkipInfo(Type type, GeneratorTrace trace)
         {

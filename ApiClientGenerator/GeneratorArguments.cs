@@ -20,7 +20,8 @@ namespace Simons.Generators.ApiClient
 
         private Dictionary<Type, string> _pathMappings { get; set; } = []; //type = server, string = client
         private Dictionary<Type, Type> _typeMappings { get; set; } = []; ////type = server, type = client
-        private HashSet<Type>? _partials;
+        private HashSet<Type>? _selectedPartials;
+        private Dictionary<Type, string>? _partialInsets;
         public ReadOnlyDictionary<Type, string> PathMappings => _pathMappings.AsReadOnly();
         public ReadOnlyDictionary<Type, Type> TypeMappings => _typeMappings.AsReadOnly();
         
@@ -63,20 +64,35 @@ namespace Simons.Generators.ApiClient
 
         public GeneratorArguments WithPartials(params IEnumerable<Type>? controllers)
         {
-            bool precise = false;
-            if (controllers is not null && controllers.Any()) { precise = true; }
+            bool selective = false;
+            if (controllers is not null && controllers.Any()) { selective = true; }
 
-            if (!precise)
+            if (selective)
             {
-                _partials = [..controllers];
+                _selectedPartials = [..controllers];
             }
+
+            //swap this with schemes per controller
+            _partialInsets = _selectedPartials?.ToDictionary(p => p, p => ApiClientGenerator.DEFAULT_INSET);
 
             this.GeneratePartials = true;
             return this;
         }
 
-        public IEnumerable<Type> GetPartials()
-            => _partials ?? [];
+        public bool IsPartial(Type controllerType)
+        {
+            if (_selectedPartials is null) { return true; }
+            else if (!_selectedPartials.Any()) { return true; }
+            else { return _selectedPartials.Contains(controllerType); }
+        }
+
+        public string GetInset(Type partial)
+        {
+            string? inset = null;
+            _partialInsets?.TryGetValue(partial, out inset);
+
+            return inset ?? ApiClientGenerator.DEFAULT_INSET;
+        }
 
         private GeneratorArguments Add(Type type, string location)
         {

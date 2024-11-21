@@ -14,7 +14,7 @@
             var files = Directory.GetFiles(root, $"{type.Name}.cs", SearchOption.AllDirectories);
 
             if (files.Length == 0) { return null; }
-            return files[0];
+            return ParentDir(files[0].AsSpan()).ToString(); //saves a single string copy within the method, but hey
         }
 
         private static string GetRoot()
@@ -23,6 +23,11 @@
             var arr = Directory.GetCurrentDirectory()[..Environment.CurrentDirectory.IndexOf("bin")][..^1].Split('\\');
             string slnRoot = string.Join("\\", arr[..^1]);
             return slnRoot;
+        }
+
+        private static ReadOnlySpan<char> ParentDir(ReadOnlySpan<char> filePath)
+        {
+            return filePath[..filePath.LastIndexOf('\\')];
         }
     }
 }

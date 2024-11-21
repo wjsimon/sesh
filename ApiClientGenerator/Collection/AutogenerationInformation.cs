@@ -10,6 +10,7 @@ namespace Simons.Generators.ApiClient.Collection
         public IEnumerable<AutogenerationMethodInformation> Methods = Enumerable.Empty<AutogenerationMethodInformation>();
         public string NameSpace { get; set; } = string.Empty;
         public bool GenerateAsPartial { get; set; } = false;
+        public string? PartialInset {  get; set; }
         public AutogenerationResult AutogenerationResult { get; set; } = AutogenerationResult.Success;
         public string Reason { get; set; } = string.Empty;
 
@@ -22,10 +23,10 @@ namespace Simons.Generators.ApiClient.Collection
         {
             if (args.GeneratePartials)
             {
-                var partials = args.GetPartials();
-                if (!partials.Any() || partials.Contains(ControllerType))
+                if (args.IsPartial(ControllerType))
                 {
                     GenerateAsPartial = true;
+                    PartialInset = args.GetInset(ControllerType);
                 }
             }
         }
