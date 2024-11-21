@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace Simons.Http
+namespace Simons.Clients.Http
 {
     internal sealed class HttpHandler(HttpClient http, HttpHandlerOptions? options = null) : IHttpHandler
     {
@@ -19,8 +19,8 @@ namespace Simons.Http
         }
 
         public async Task PostAsync<TValue>(string? requestUri, TValue? payload)
-            => await this.PostAsyncInternal<TValue, object>(requestUri, payload);
-        
+            => await PostAsyncInternal<TValue, object>(requestUri, payload);
+
         public Task<TResult?> PostAsync<TResult>(string? requestUri)
             => PostAsyncInternal<object, TResult>(requestUri, null);
 
@@ -30,14 +30,14 @@ namespace Simons.Http
         private async Task<TResult?> PostAsyncInternal<TValue, TResult>(string? requestUri, TValue? payload)
         {
             var response = await _httpClient.PostAsJsonAsync(requestUri, payload, JsonSerializerOptions);
-            if (!response.IsSuccessStatusCode) 
+            if (!response.IsSuccessStatusCode)
             {
                 if (_options is not null && _options.ThrowOnStatusCodeUnsuccessful)
                 {
                     throw new HttpRequestException(response.ReasonPhrase);
                 }
 
-                return default; 
+                return default;
             }
 
             return await ParseResponse<TResult>(response);

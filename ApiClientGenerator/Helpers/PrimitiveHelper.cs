@@ -2,7 +2,6 @@
 {
     internal class PrimitiveHelper
     {
-
         public static string SwapPrimitive(Type type)
         {
             var name = type.Name;

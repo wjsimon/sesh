@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Simons.Http
+namespace Simons.Clients.Http
 {
     public class HttpHandlerOptions
     {

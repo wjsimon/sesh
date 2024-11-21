@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
+    <AssemblyName>Simons.Clients.Http</AssemblyName>
+    <RootNamespace>Simons.Clients.Http</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

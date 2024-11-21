@@ -5,6 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
+    <RootNamespace>Simons.Generators.ApiClient</RootNamespace>
+    <AssemblyName>Simons.Generators.ApiClient</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Runtime.CompilerServices;
 
-namespace Simons.Http
+namespace Simons.Clients.Http
 {
     public abstract class ApiClient
     {
@@ -14,7 +14,7 @@ namespace Simons.Http
 
         protected readonly IHttpHandler _httpHandler;
         protected abstract string ApiControllerName { get; init; }
-        
+
         protected virtual Task<TValue?> GetAsync<TValue>(string? requestUri)
             => _httpHandler.GetAsync<TValue>(requestUri);
         protected virtual Task<TResult?> PostAsync<TValue, TResult>(string? requestUri, TValue? payload)
@@ -22,7 +22,7 @@ namespace Simons.Http
         protected virtual Task<TResult?> PostAsync<TResult>(string? requestUri)
             => _httpHandler.PostAsync<TResult>(requestUri);
         protected virtual Task PostAsync<TValue>(string? requestUri, TValue? payload)
-            => _httpHandler.PostAsync<TValue>(requestUri, payload);
+            => _httpHandler.PostAsync(requestUri, payload);
 
         protected virtual string Uri([CallerMemberName] string? caller = null)
         {
