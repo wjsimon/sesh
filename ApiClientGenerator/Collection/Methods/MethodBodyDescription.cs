@@ -1,4 +1,5 @@
 ﻿using Simons.Generators.ApiClient.Helpers;
+using System.Text;
 
 namespace Simons.Generators.ApiClient.Collection.Methods
 {
@@ -15,6 +16,7 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         protected int ParameterCount => MethodInfo.ParametersMetaData.Count;
         protected bool HasParameters => ParameterCount > 0;
         protected List<(Type Type, string Name)> Parameters => MethodInfo.ParametersMetaData;
+        protected bool HasPayload => MethodInfo.ParametersMetaData.Last().Name == "payload";
 
         private string? _methodPass;
         private string? _taskSnippet;
@@ -23,13 +25,16 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         protected abstract string MakeMethodPass();
         protected abstract string MakeTaskSnippet();
         protected abstract string MakeUri();
-        protected virtual List<string> MakeUriDict()
+
+        protected virtual IEnumerable<string> MakeUriDict()
         {
             if (ParameterCount < 2) { return []; }
-            return DictFromTuples(Parameters);
+
+            var parameters = this.HasPayload ? Parameters.Take(ParameterCount-1) : Parameters;
+            return DictFromTuples(parameters);
         }
 
-        protected static List<string> DictFromTuples(List<(Type Type, string Name)>? parameterValues)
+        protected static IEnumerable<string> DictFromTuples(IEnumerable<(Type Type, string Name)>? parameterValues)
         {
             if (parameterValues is null) { return []; }
 
@@ -39,6 +44,7 @@ namespace Simons.Generators.ApiClient.Collection.Methods
                 lines.Add($"dict.Add({$"\"{value.Name}\""}, {value.Name}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
             }
             lines.Add("");
+
             return lines;
         }
 
@@ -48,6 +54,7 @@ namespace Simons.Generators.ApiClient.Collection.Methods
             _taskSnippet = MakeTaskSnippet();
             _uri = MakeUri();
         }
+
         protected static string MakeUri(string parameterValueName)
             => $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}))";
 
@@ -67,7 +74,13 @@ namespace Simons.Generators.ApiClient.Collection.Methods
                 lines.Add($"dict.Add({$"\"{value}\""}, {value}.ToString());"); //need to implement "ToString" correctly. big issue with datetime; need to do something about that
             }
 
-            return $"Uri(dict)";
+            StringBuilder sb = new StringBuilder();
+            foreach(var value in parameterValueNames)
+            {
+                sb.AppendLine($"({$"\"{value}\""}, {value}.ToString()),");
+            }
+
+            return $"Uri({sb.ToString()})";
         }
 
         public new List<string> ToString()
@@ -112,6 +125,6 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         }
 
         private static string GenericNullFallthrough()
-            => $" default";        
+            => $"default";        
     }
 }

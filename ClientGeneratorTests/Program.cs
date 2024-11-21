@@ -13,7 +13,7 @@ internal class Program
                 printGeneratedCode: true)
             .AddRange([
                 (typeof(TestController), typeof(ApiClient)),
-                (typeof(AutogenerateController), typeof(AutogenerateController))
+                //(typeof(AutogenerateController), typeof(AutogenerateController))
             ])
             //.DisableNullable()
         );

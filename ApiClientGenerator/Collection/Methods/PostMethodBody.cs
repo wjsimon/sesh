@@ -39,21 +39,19 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         };
 
         private static string MakeUri(Type returnType, Type payloadType, string payloadName)
-            => $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}(Uri(), {payloadName});";
+            => $"(Uri(), {payloadName});";
 
         private static string MakeUri(Type returnType, Type payloadType, string payloadName, string parameterValueName)
-            => $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}" +
-                $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}), {payloadName})";
+            => $"(Uri({$"\"{parameterValueName}\""}, {parameterValueName}), {payloadName})";
 
         private static string MakeUri(Type returnType, Type payloadType, string payloadName, (string, string) parameterValueNames)
-            => $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}" +
-                $"(Uri(" +
+            => $"(Uri(" +
                 $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1})"}, " +
                 $"{$"(\"{parameterValueNames.Item2}\", {parameterValueNames.Item2})"}" +
                 $"), {payloadName})";
 
         private static string MakeUri(Type returnType, Type payloadType, string payloadName, List<(Type Type, string Name)> parameterValues)
-            => $"return this.PostAsync{TaskSnippetFromMethodReturnAnnotation(returnType, payloadType)}(Uri(dict), {payloadName})";
+            => $"(Uri(dict), {payloadName})";
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
         {
