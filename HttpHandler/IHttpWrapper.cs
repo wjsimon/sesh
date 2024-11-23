@@ -1,6 +1,6 @@
 ﻿namespace Simons.Clients.Http
 {
-    public interface IHttpHandler
+    public interface IHttpWrapper
     {
         Task<TValue?> GetAsync<TValue>(string? requestUri);
         Task PostAsync<TValue>(string? requestUri, TValue? payload);

@@ -2,8 +2,7 @@
 
 namespace Simons.Generators.ApiClient
 {
-    [ApiController, AutoGenerateApiClient]
-    [Route("[controller]")]
+    [ApiController, Route("[controller]"), AutoGenerateApiClient]
     public class TestController : ControllerBase
     {
         //[HttpGet, Returns(typeof(string))]
