@@ -16,7 +16,7 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         protected int ParameterCount => MethodInfo.ParametersMetaData.Count;
         protected bool HasParameters => ParameterCount > 0;
         protected List<(Type Type, string Name)> Parameters => MethodInfo.ParametersMetaData;
-        protected bool HasPayload => MethodInfo.ParametersMetaData.Last().Name == "payload";
+        protected bool HasPayload => MethodInfo.FromBodyIndex > 0;
 
         private string? _methodPass;
         private string? _taskSnippet;
@@ -110,14 +110,9 @@ namespace Simons.Generators.ApiClient.Collection.Methods
 
         private string ReturnTypeNullFallthroughSnippet(Type type)
         {
-            if (IsEnumerable(type)) { return EnumerableNullFallthrough(); }
+            if (TypeHelper.IsEnumerable(type)) { return EnumerableNullFallthrough(); }
             else { return GenericNullFallthrough(); }
         }
-
-        private static bool IsEnumerable(Type type)
-            => Array.Exists(
-                type.GetInterfaces(),
-                i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));       
 
         private static string EnumerableNullFallthrough()
         {
@@ -125,6 +120,6 @@ namespace Simons.Generators.ApiClient.Collection.Methods
         }
 
         private static string GenericNullFallthrough()
-            => $"default";        
+            => $"default";     
     }
 }

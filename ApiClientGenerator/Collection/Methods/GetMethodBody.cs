@@ -34,7 +34,7 @@ namespace Simons.Generators.ApiClient.Collection.Methods
 
         private static string TaskReturnValueSnippet(Type returnType)
         {
-            return $"<{PrimitiveHelper.SwapPrimitive(returnType)}>";
+            return $"<{TypeHelper.TypeAsCodeSnippet(returnType)}>";
         }
     }
 }

@@ -25,9 +25,9 @@ namespace Simons.Generators.ApiClient
         //}
 
         //[HttpGet, Returns(typeof(bool))]
-        //public IActionResult ThreeParameterGet([FromQuery] int index, [FromQuery] string name, [FromQuery] object value) 
-        //{ 
-        //    return Ok(); 
+        //public IActionResult ThreeParameterGet([FromQuery] int index, [FromQuery] string name, [FromQuery] object value)
+        //{
+        //    return Ok();
         //}
 
         //[HttpPost, Returns(typeof(void))]
@@ -48,11 +48,11 @@ namespace Simons.Generators.ApiClient
         //[HttpPost, Returns(typeof(void))]
         //public IActionResult OneParameterPost([FromQuery] int index, [FromBody] object payload) { return Ok(); }
 
-        //[HttpPost, Returns(typeof(bool))]
-        //public IActionResult TwoParametersPost([FromQuery] int index, [FromQuery] string name, [FromBody] object payload) { return Ok(); }
+        [HttpPost, Returns(typeof(Dictionary<string, string>))]
+        public IActionResult TwoParametersPost([FromQuery] int index, [FromQuery] string name, [FromBody] object payload) { return Ok(); }
 
-        [HttpPost, Returns(typeof(bool))]
-        public IActionResult ThreeParametersPost([FromQuery] int index, [FromQuery] string name, [FromQuery] object value, [FromBody] object payload) { return Ok(); }
+        //[HttpPost, Returns(typeof(List<object>))]
+        //public IActionResult ThreeParametersPost([FromQuery] int index, [FromQuery] string name, [FromQuery] object value, [FromBody] object payload) { return Ok(); }
 
         //[HttpPost, Returns(typeof(bool))]
         //public IActionResult ThreeParametersPostUnordered([FromQuery] int index, [FromBody] object payload, [FromQuery] string name, [FromQuery] object value) { return Ok(); }

@@ -8,7 +8,6 @@ namespace Simons.Generators.ApiClient.Collection.Methods
 
         private Type PayloadType => ParameterCount > 0 ? Parameters.Last().Type : typeof(void);
         private string PayloadName => ParameterCount > 0 ? Parameters.Last().Name : string.Empty;
-        private bool HasPayload => MethodInfo.FromBodyIndex > 0;
 
         public static PostMethodBody Create(AutogenerationMethodInformation methodInfo)
             => new PostMethodBody(methodInfo);
@@ -55,8 +54,8 @@ namespace Simons.Generators.ApiClient.Collection.Methods
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
         {
-            var returnStr = returnType != typeof(void) ? $"<{PrimitiveHelper.SwapPrimitive(returnType)}, " : "<";
-            return $"{returnStr}{(payloadType != typeof(void) ? $"{PrimitiveHelper.SwapPrimitive(payloadType)}" : "")}>";
+            var returnStr = returnType != typeof(void) ? $"<{TypeHelper.TypeAsCodeSnippet(returnType)}, " : "<";
+            return $"{returnStr}{(payloadType != typeof(void) ? $"{TypeHelper.TypeAsCodeSnippet(payloadType)}" : "")}>";
         }
     }
 }

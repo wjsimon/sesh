@@ -64,7 +64,7 @@ namespace Simons.Generators.ApiClient
             => PostMethodBody.Create(methodInfo).ToString();
 
         private static string SwapPrimitive(Type type)
-            => PrimitiveHelper.SwapPrimitive(type);
+            => TypeHelper.TypeAsCodeSnippet(type);
 
         private static string TaskSnippetFromMethodReturnAnnotation(AutogenerationMethodInformation methodInfo)
         {
