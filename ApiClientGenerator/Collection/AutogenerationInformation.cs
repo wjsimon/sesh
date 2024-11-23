@@ -1,6 +1,6 @@
-﻿using Simons.Generators.ApiClient.Collection.Methods;
+﻿using Simons.Generators.HttpClient.Collection.Methods;
 
-namespace Simons.Generators.ApiClient.Collection
+namespace Simons.Generators.HttpClient.Collection
 {
     internal record class AutogenerationInformation(
         Type ControllerType,

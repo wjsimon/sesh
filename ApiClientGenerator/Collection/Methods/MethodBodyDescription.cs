@@ -1,7 +1,7 @@
-﻿using Simons.Generators.ApiClient.Helpers;
+﻿using Simons.Generators.HttpClient.Helpers;
 using System.Text;
 
-namespace Simons.Generators.ApiClient.Collection.Methods
+namespace Simons.Generators.HttpClient.Collection.Methods
 {
     internal abstract class MethodBodyDescription
     {

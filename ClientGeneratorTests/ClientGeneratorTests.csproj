@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApiClientGenerator\ApiClientGenerator.csproj" />
-    <ProjectReference Include="..\HttpHandler\ApiClient.csproj" />
+    <ProjectReference Include="..\ApiClient\ApiClient.csproj" />
   </ItemGroup>
 
 </Project>

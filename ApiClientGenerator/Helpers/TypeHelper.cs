@@ -1,4 +1,4 @@
-﻿namespace Simons.Generators.ApiClient.Helpers
+﻿namespace Simons.Generators.HttpClient.Helpers
 {
     internal static class TypeHelper
     {

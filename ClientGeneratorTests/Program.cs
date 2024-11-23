@@ -1,6 +1,6 @@
 ﻿using Simons.Clients.Http;
-using Simons.Generators.ApiClient;
-using Simons.Generators.ApiClient.Controllers;
+using Simons.Generators.HttpClient;
+using Simons.Generators.HttpClient.Controllers;
 using System.Collections.Generic;
 
 internal class Program

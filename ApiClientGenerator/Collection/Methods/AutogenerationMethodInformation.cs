@@ -1,4 +1,4 @@
-﻿namespace Simons.Generators.ApiClient.Collection.Methods
+﻿namespace Simons.Generators.HttpClient.Collection.Methods
 {
     internal record AutogenerationMethodInformation
     {

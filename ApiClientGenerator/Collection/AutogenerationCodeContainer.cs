@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Simons.Generators.ApiClient.Collection
+namespace Simons.Generators.HttpClient.Collection
 {
     internal class AutogenerationCodeContainer
     {

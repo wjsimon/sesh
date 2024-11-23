@@ -1,8 +1,8 @@
-﻿using Simons.Generators.ApiClient.Collection;
-using Simons.Generators.ApiClient.Collection.Methods;
-using Simons.Generators.ApiClient.Helpers;
+﻿using Simons.Generators.HttpClient.Collection;
+using Simons.Generators.HttpClient.Collection.Methods;
+using Simons.Generators.HttpClient.Helpers;
 
-namespace Simons.Generators.ApiClient
+namespace Simons.Generators.HttpClient
 {
     internal class FormattingClassGenerator
     {

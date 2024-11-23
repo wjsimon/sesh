@@ -1,4 +1,4 @@
-﻿namespace Simons.Generators.ApiClient.Collection
+﻿namespace Simons.Generators.HttpClient.Collection
 {
     internal enum AutogenerationResult
     {

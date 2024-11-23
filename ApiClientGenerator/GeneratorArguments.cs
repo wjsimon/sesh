@@ -1,7 +1,7 @@
-﻿using Simons.Generators.ApiClient.Helpers;
+﻿using Simons.Generators.HttpClient.Helpers;
 using System.Collections.ObjectModel;
 
-namespace Simons.Generators.ApiClient
+namespace Simons.Generators.HttpClient
 {
     public class GeneratorArguments
     {

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiClient", "ApiClient\ApiClient.csproj", "{677DCD02-F73C-4382-A3A8-8B206C6FD10C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiClient", "HttpHandler\ApiClient.csproj", "{677DCD02-F73C-4382-A3A8-8B206C6FD10C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientGeneratorTests", "ClientGeneratorTests\ClientGeneratorTests.csproj", "{3B85C7C1-1010-4DE6-95D4-A3A2BCD6DF91}"
 EndProject

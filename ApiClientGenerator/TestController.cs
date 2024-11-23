@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Simons.Generators.ApiClient
+namespace Simons.Generators.HttpClient
 {
     [ApiController, Route("[controller]"), AutoGenerateApiClient]
     public class TestController : ControllerBase

@@ -1,8 +1,8 @@
-﻿using Simons.Generators.ApiClient.Collection;
-using Simons.Generators.ApiClient.Tracing;
+﻿using Simons.Generators.HttpClient.Collection;
+using Simons.Generators.HttpClient.Tracing;
 using System.Reflection;
 
-namespace Simons.Generators.ApiClient
+namespace Simons.Generators.HttpClient
 {
     public static class ApiClientGenerator
     {
