@@ -238,6 +238,7 @@ ClientBin/
 *.jfm
 *.pfx
 *.publishsettings
+*.bak
 orleans.codegen.cs
 
 # Including strong name files can present a security risk
@@ -361,3 +362,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Other folders
+ClientGeneratorTests/
