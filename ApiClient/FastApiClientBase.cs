@@ -3,18 +3,18 @@ using System.Runtime.CompilerServices;
 
 namespace Simons.Clients.Http
 {
-    public abstract class ApiClient
+    public abstract class FastApiClientBase
     {
-        public ApiClient(IHttpWrapper httpHandler)
+        public FastApiClientBase(IHttpWrapper httpHandler)
         {
             _httpWrapper = httpHandler;
         }
 
-        public ApiClient(HttpClient httpClient) : this(new SimonsHttpWrapper(httpClient)) { }
-        public ApiClient(HttpClientHandler httpClientHandler) : this(new HttpClient(httpClientHandler)) { }
+        public FastApiClientBase(HttpClient httpClient) : this(new SimonsHttpWrapper(httpClient)) { }
+        public FastApiClientBase(HttpClientHandler httpClientHandler) : this(new HttpClient(httpClientHandler)) { }
 
         protected readonly IHttpWrapper _httpWrapper;
-        protected abstract string ApiControllerName { get; init; }
+        protected abstract string ApiControllerRoute { get; init; }
 
         protected virtual Task<TValue?> GetAsync<TValue>(string? requestUri)
             => _httpWrapper.GetAsync<TValue>(requestUri);
@@ -25,13 +25,13 @@ namespace Simons.Clients.Http
         protected virtual Task PostAsync<TValue>(string? requestUri, TValue? payload)
             => _httpWrapper.PostAsync(requestUri, payload);
 
-        protected string Uri([CallerMemberName] string? caller = null, params (string, string?)[]? parameters)
+        protected virtual string Uri([CallerMemberName] string? caller = null, params (string, string?)[]? parameters)
         {
             EnsureValidCaller(caller);
 
             if (parameters is null)
             {
-                return $"{ApiControllerName}/{AdjustCallerMemberName(caller)}";
+                return $"{ApiControllerRoute}/{AdjustCallerMemberName(caller)}";
             }
 
             Dictionary<string, string?> param = new([
@@ -47,7 +47,7 @@ namespace Simons.Clients.Http
             return QueryHelpers.AddQueryString(Uri(caller), dict);
         }
 
-        protected virtual string AdjustCallerMemberName(string? caller) //check overrides if you wan't to understand what this does
+        protected virtual string AdjustCallerMemberName(string? caller)
         {
             EnsureValidCaller(caller);
             return caller!;
