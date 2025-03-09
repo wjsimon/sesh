@@ -22,7 +22,6 @@ The absolute easiest way to get started is to simply use the included "FastApiCl
 From here, you get immediate access to the Post & Get Methods.
 
         client.GetAsync<int>("My/Get");
-        client.GetPost<bool>("My/Get");
         client.PostAsync<bool, int>("My/Post", true);
         
 To get started for real however, you should instead opt to derive from the included "FastApiClientBase". As each class definition is conceptually scoped to a controller name, a strict 1-to-1 mapping is encouraged, but not enforced.
