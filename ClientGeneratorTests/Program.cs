@@ -1,7 +1,5 @@
 ﻿using Simons.Clients.Http;
 using Simons.Generators.HttpClient;
-using Simons.Generators.HttpClient.Controllers;
-using System.Collections.Generic;
 
 internal class Program
 {
@@ -16,7 +14,7 @@ internal class Program
                 (typeof(TestController), typeof(ApiClient)),
                 //(typeof(AutogenerateController), typeof(AutogenerateController))
             ])
-            //.AllowNullReturns()
+            .AllowNullReturns()
         );
 
         List<string> list= new List<string>();
