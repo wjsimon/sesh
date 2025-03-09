@@ -6,5 +6,6 @@ Meant for people who often set up larger server-side controllers, or many of the
 
 .NET 9.0+ support only. This is a preview still. If there's anything missing which you'd like to see, feel free to open an issue or send me a message.
 
-The current master is available as pre-built DLLs here: [build.zip](https://github.com/user-attachments/files/19150090/build.zip).
+The current master is available as pre-built DLLs here: [build.zip](https://github.com/user-attachments/files/19150109/build.zip).
 If you wish to only use the wrapper, you do not need to reference the included generator .dll.
+
