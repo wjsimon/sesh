@@ -1,6 +1,7 @@
 ﻿using Simons.Generators.HttpClient.Collection;
 using Simons.Generators.HttpClient.Collection.Methods;
 using Simons.Generators.HttpClient.Helpers;
+using System.Text;
 
 namespace Simons.Generators.HttpClient
 {
@@ -21,13 +22,48 @@ namespace Simons.Generators.HttpClient
 
         public FormattingClassGenerator AddClass(AutogenerationInformation classInfo)
         {
-            _container.SetClassDefinition($"public{(classInfo.GenerateAsPartial ? " partial" : "")} class {classInfo.ControllerRoute}ApiClient : ApiClient");
+            _container.SetClassDefinition($"public{(classInfo.GenerateAsPartial ? " partial" : "")} class {classInfo.ControllerRoute}ApiClient : FastApiClientBase");
             return this;
         }
 
         public FormattingClassGenerator AddGetOnlyProperty(Type returnValue, string propertyName, string propertyValue)
         {
-            _container.AddPublicPropertyDefintion($"public {SwapPrimitive(returnValue)} {propertyName} => \"{propertyValue}\";");
+            _container.AddPublicPropertyDefinition($"public {SwapPrimitive(returnValue)} {propertyName} => \"{propertyValue}\";");
+            return this;
+        }
+
+        public FormattingClassGenerator AddConstructor(string className, IEnumerable<KeyValuePair<string, string>> parameters, bool passToBase = true)
+        {
+            StringBuilder sb = new();
+            sb.Append($"public {className}(");
+
+            foreach (var p in parameters)
+            {
+                sb.Append($"{p.Key} {p.Value}, ");
+            }
+
+            string step = sb.ToString()[..^2];
+
+            sb = new();
+            sb.Append(step);
+            sb.Append(")");
+
+            if (passToBase)
+            {
+                StringBuilder nested = new();
+                foreach(var p in parameters)
+                {
+                    nested.Append($"{p.Value}, ");
+                }
+
+                string nstep = nested.ToString()[..^2];
+
+                sb.Append($" : base({nstep})");
+            }
+
+            sb.Append(" { }");
+
+            _container.AddPublicConstructorDefinition(sb.ToString());
             return this;
         }
 

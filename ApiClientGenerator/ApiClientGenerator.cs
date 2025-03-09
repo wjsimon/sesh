@@ -1,4 +1,5 @@
-﻿using Simons.Generators.HttpClient.Collection;
+﻿using Simons.Clients.Http;
+using Simons.Generators.HttpClient.Collection;
 using Simons.Generators.HttpClient.Tracing;
 using System.Reflection;
 
@@ -91,6 +92,15 @@ namespace Simons.Generators.HttpClient
             generator
                 .AddNamespace(nameSpace)
                 .AddClass(info)
+                .AddConstructor(
+                    $"{info.ControllerRoute}ApiClient", 
+                    [new("IHttpWrapper", "httpWrapper")])
+                .AddConstructor(
+                    $"{info.ControllerRoute}ApiClient",
+                    [new("HttpClient", "httpClient")])
+                .AddConstructor(
+                    $"{info.ControllerRoute}ApiClient",
+                    [new("HttpClientHandler", "httpClientHandler")])
                 .AddGetOnlyProperty(typeof(string), "ApiControllerName", info.ControllerName);
 
             foreach (var method in info.Methods)

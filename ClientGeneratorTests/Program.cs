@@ -1,5 +1,10 @@
-﻿using Simons.Clients.Http;
+﻿using Microsoft.AspNetCore.WebUtilities;
+using Simons.Clients.Http;
 using Simons.Generators.HttpClient;
+using System;
+using System.Net.Http.Json;
+using System.Text.Json;
+using System.Xml.Linq;
 
 internal class Program
 {
@@ -11,12 +16,10 @@ internal class Program
                 save: false, 
                 printGeneratedCode: true)
             .AddRange([
-                (typeof(TestController), typeof(ApiClient)),
+                (typeof(TestController), typeof(FastApiClientBase)),
                 //(typeof(AutogenerateController), typeof(AutogenerateController))
             ])
             .AllowNullReturns()
         );
-
-        List<string> list= new List<string>();
     }
 }
