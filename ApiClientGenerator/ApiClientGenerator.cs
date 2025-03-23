@@ -1,5 +1,4 @@
-﻿using Simons.Clients.Http;
-using Simons.Generators.HttpClient.Collection;
+﻿using Simons.Generators.HttpClient.Collection;
 using Simons.Generators.HttpClient.Tracing;
 using System.Reflection;
 
@@ -16,6 +15,8 @@ namespace Simons.Generators.HttpClient
         {
             GeneratorTrace trace = new();
             if (args.PrintProgress) { trace.PrintHeader(); }
+            AddIfVerbose(args, trace, "Starting assembly collection");
+
             foreach (var assembly in CollectAssemblies(args, trace))
             {
                 Generate(assembly, args, trace);
@@ -36,6 +37,7 @@ namespace Simons.Generators.HttpClient
 
             if (mappings.Count == 0) { yield break; }
 
+            AddIfVerbose(args, trace, $"Collected {mappings.Count} mappings");
             for (int i = 0; i < mappings.Count; i++)
             {
                 var mapping = mappings.ElementAt(i);
@@ -57,9 +59,14 @@ namespace Simons.Generators.HttpClient
 
         private static void Generate(Assembly controllerAssembly, GeneratorArguments args, GeneratorTrace trace)
         {
-            foreach (var info in ControllerInformationCollector.Collect(controllerAssembly, args).Where(i => i is not null))
+            AddIfVerbose(args, trace, $"Starting generation for {controllerAssembly}");
+            foreach (var info in ControllerInformationCollector.Collect(controllerAssembly, args, trace).Where(i => i is not null))
             {
-                if (!args.PathMappings.ContainsKey(info!.ControllerType)) { continue; }
+                if (!args.PathMappings.ContainsKey(info!.ControllerType)) 
+                {
+                    AddIfVerbose(args, trace, $"{info.ControllerType} not mapped! Skipping...");
+                    continue; 
+                }
 
                 info.Apply(args);
                 string fileContent = GenerateApiClient(info!, args.TypeMappings[info!.ControllerType], trace);
@@ -150,6 +157,13 @@ namespace Simons.Generators.HttpClient
         {
             if (string.IsNullOrEmpty(type.FullName)) { return string.Empty; }
             return string.Join('.', type.FullName.Split('.')[..^1]);
+        }
+
+        private static void AddIfVerbose(GeneratorArguments args, GeneratorTrace trace, string line)
+        {
+            if (!args.Verbose) { return; }
+            trace.Add(line);
+            trace.Flush(); //need to immediately flush to make sure nothing gets swallowed by exceptions
         }
     }
 }

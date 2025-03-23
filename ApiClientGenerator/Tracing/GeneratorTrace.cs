@@ -20,7 +20,7 @@ namespace Simons.Generators.HttpClient.Tracing
         public void Add(string trace)
             => _trace.Add(trace);
 
-        public void AddLine()
+        public void AddNewLine()
             => _trace.Add("");
 
         public void PrintHeader()
@@ -28,13 +28,13 @@ namespace Simons.Generators.HttpClient.Tracing
             Add($"===================================");
             Add($"======= Starting generating =======");
             Add($"===================================");
-            AddLine();
+            AddNewLine();
             Flush();
         }
 
         public void PrintFooter()
         {
-            AddLine();
+            AddNewLine();
             Add($"===================================");
             Add($"========= Done generating =========");
             Add($"===================================");
@@ -61,8 +61,8 @@ namespace Simons.Generators.HttpClient.Tracing
             if (_genStack.Count == 0) { return string.Empty; }
             AggregateSummary();
 
-            AddLine();
-            AddLine();
+            AddNewLine();
+            AddNewLine();
             Add($"Successfully generated {_successCount} / {_fileCount}");
 
             if (_skippedGenerations is not null && _skippedGenerations.Any())

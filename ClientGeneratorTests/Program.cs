@@ -14,7 +14,8 @@ internal class Program
             GeneratorArguments
             .Create(
                 save: false, 
-                printGeneratedCode: true)
+                printGeneratedCode: true,
+                verbose: true)
             .AddRange([
                 (typeof(TestController), typeof(FastApiClientBase)),
                 //(typeof(AutogenerateController), typeof(AutogenerateController))

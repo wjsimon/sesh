@@ -9,13 +9,15 @@ namespace Simons.Generators.HttpClient
             bool save,
             bool fileNameMatchesClassName,
             bool printGeneratedCode,
-            bool printProgress
+            bool printProgress,
+            bool verbose
         )
         {
             this.Save = save;
             this.FileNameMatchesClassName = fileNameMatchesClassName;
             this.PrintGeneratedCode = printGeneratedCode;
             this.PrintProgress = printProgress;
+            this.Verbose = verbose;
         }
 
         private Dictionary<Type, string> _pathMappings { get; set; } = []; //type = server, string = client
@@ -29,6 +31,7 @@ namespace Simons.Generators.HttpClient
         public bool FileNameMatchesClassName { get; private set; }
         public bool PrintGeneratedCode { get; private set; }
         public bool PrintProgress { get; private set; }
+        public bool Verbose { get; private set; }
         public bool GeneratePartials { get; private set; }
         public bool AreNullReturnsAllowed { get; private set; }
 
@@ -36,9 +39,10 @@ namespace Simons.Generators.HttpClient
             bool save = true, 
             bool fileNameMatchesClassName = true,
             bool printGeneratedCode = false,
-            bool printProgress = true)
+            bool printProgress = true,
+            bool verbose = false)
         {
-            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode, printProgress);
+            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode, printProgress, verbose);
             return args;
         }
 
