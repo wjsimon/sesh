@@ -32,6 +32,24 @@ namespace Simons.Generators.HttpClient
             return this;
         }
 
+        public FormattingClassGenerator AddInitProperty(Type returnValue, string propertyName, string propertyValue, bool isOverride = false)
+        {
+            //protected override string ApiControllerRoute { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
+            string fieldName = propertyName.FirstToLower();
+            _container.AddPublicPropertyDefinition($"public {(isOverride ? "override " : "")}" +
+                $"{SwapPrimitive(returnValue)} {propertyName} {{ get => _{fieldName}; init => _{fieldName} = value; }}");
+
+            AddPrivateField(returnValue, fieldName, propertyValue);
+
+            return this;
+        }
+
+        public FormattingClassGenerator AddPrivateField(Type returnValue, string fieldName, string fieldValue)
+        {
+            _container.AddPrivateFieldDefinition($"private {SwapPrimitive(returnValue)} _{fieldName} = \"{fieldValue}\";");
+            return this;
+        }
+
         public FormattingClassGenerator AddConstructor(string className, IEnumerable<KeyValuePair<string, string>> parameters, bool passToBase = true)
         {
             StringBuilder sb = new();

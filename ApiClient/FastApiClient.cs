@@ -12,12 +12,12 @@ namespace Simons.Clients.Http
 
         private readonly string _apiControllerName = string.Empty;
 
-        protected override string ApiControllerRoute { get => _apiControllerName; init => _apiControllerName = string.Empty; }
+        public override string ApiControllerRoute { get => _apiControllerName; init => _apiControllerName = string.Empty; }
 
         protected override string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
             => throw new NotSupportedException();
         
-        protected override string Uri([CallerMemberName] string? caller = null, params (string, string?)[]? parameters)
+        protected override string Uri((string, string?)[]? parameters = null, [CallerMemberName] string? caller = null)
             => throw new NotSupportedException();
 
         public new Task<TValue?> GetAsync<TValue>(string? requestUri)

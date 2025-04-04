@@ -55,6 +55,8 @@ namespace Simons.Generators.HttpClient
         public GeneratorArguments Add(Type controllerType, Type targetAssemblyType)
         {
             string? location = GetLocation(targetAssemblyType, this.FileNameMatchesClassName);
+
+            Console.WriteLine($"location: {location}");
             if (!string.IsNullOrEmpty(location)) 
             {
                 Add(controllerType, location);

@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
-using Simons.Clients.Http;
+﻿using Simons.Clients.Http;
 using Simons.Generators.HttpClient;
-using System;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Xml.Linq;
 
 internal class Program
 {
@@ -13,7 +8,7 @@ internal class Program
         ApiClientGenerator.Generate(
             GeneratorArguments
             .Create(
-                save: false, 
+                save: true, 
                 printGeneratedCode: true,
                 verbose: true)
             .AddRange([

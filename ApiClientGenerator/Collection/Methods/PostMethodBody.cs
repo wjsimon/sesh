@@ -44,18 +44,18 @@ namespace Simons.Generators.HttpClient.Collection.Methods
             => $"Uri({$"\"{parameterValueName}\""}, {parameterValueName}), {payloadName})";
 
         private static string MakeUri(Type returnType, Type payloadType, string payloadName, (string, string) parameterValueNames)
-            => $"Uri(" +
-                $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1})"}, " +
-                $"{$"(\"{parameterValueNames.Item2}\", {parameterValueNames.Item2})"}" +
-                $", {payloadName})";
+            => $"Uri([" +
+                $"{$"(\"{parameterValueNames.Item1}\", {parameterValueNames.Item1}.ToString())"}, " +
+                $"{$"(\"{parameterValueNames.Item2}\", {parameterValueNames.Item2}.ToString())"}]), " +
+                $"{payloadName}";
 
         private static string MakeUri(Type returnType, Type payloadType, string payloadName, List<(Type Type, string Name)> parameterValues)
             => $"Uri(dict), {payloadName}";
 
         private static string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
         {
-            var returnStr = returnType != typeof(void) ? $"<{TypeHelper.TypeAsCodeSnippet(returnType)}, " : "<";
-            return $"{returnStr}{(payloadType != typeof(void) ? $"{TypeHelper.TypeAsCodeSnippet(payloadType)}" : "")}>";
+            var returnStr = returnType != typeof(void) ? $"<{TypeHelper.TypeAsCodeSnippet(payloadType)}, " : "<";
+            return $"{returnStr}{(payloadType != typeof(void) ? $"{TypeHelper.TypeAsCodeSnippet(returnType)}" : "")}>";
         }
     }
 }

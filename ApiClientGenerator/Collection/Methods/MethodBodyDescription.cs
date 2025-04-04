@@ -28,7 +28,7 @@ namespace Simons.Generators.HttpClient.Collection.Methods
 
         protected virtual IEnumerable<string> MakeUriDict()
         {
-            if (ParameterCount < 2) { return []; }
+            if (this.HasPayload ? ParameterCount < 4 : ParameterCount < 3) { return []; }
 
             var parameters = this.HasPayload ? Parameters.Take(ParameterCount-1) : Parameters;
             return DictFromTuples(parameters);
@@ -87,19 +87,20 @@ namespace Simons.Generators.HttpClient.Collection.Methods
         {
             var lines = new List<string>();
             lines.AddRange(MakeUriDict()); //returns empty list if theres no parameters
-            lines.Add(MakeReturnLine());
+            lines.Add(MakeReturnLine(isSingleLine: lines.Count == 0));
             return lines;
         }
 
-        private string MakeReturnLine()
+        private string MakeReturnLine(bool isSingleLine = false)
         {
+            string returnSnippet = (isSingleLine ? "" : "return ");
             if (MethodInfo.AreNullReturnsAllowed)
             {
-                return $"return {_methodPass}{_taskSnippet}({_uri});";
+                return $"{returnSnippet}{_methodPass}{_taskSnippet}({_uri});";
             }
             else
             {
-                return $"return {_methodPass}{_taskSnippet}({_uri}){MakeNullFallthrough(ReturnType)};";
+                return $"{returnSnippet} {_methodPass}{_taskSnippet}({_uri}){MakeNullFallthrough(ReturnType)};";
             }
         }
 

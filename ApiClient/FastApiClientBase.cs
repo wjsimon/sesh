@@ -14,7 +14,7 @@ namespace Simons.Clients.Http
         public FastApiClientBase(HttpClientHandler httpClientHandler) : this(new HttpClient(httpClientHandler)) { }
 
         protected readonly IHttpWrapper _httpWrapper;
-        protected abstract string ApiControllerRoute { get; init; }
+        public abstract string ApiControllerRoute { get; init; }
 
         protected virtual Task<TValue?> GetAsync<TValue>(string? requestUri)
             => _httpWrapper.GetAsync<TValue>(requestUri);
@@ -25,7 +25,7 @@ namespace Simons.Clients.Http
         protected virtual Task PostAsync<TValue>(string? requestUri, TValue? payload)
             => _httpWrapper.PostAsync(requestUri, payload);
 
-        protected virtual string Uri([CallerMemberName] string? caller = null, params (string, string?)[]? parameters)
+        protected virtual string Uri((string, string?)[]? parameters = null, [CallerMemberName] string? caller = null)
         {
             EnsureValidCaller(caller);
 
@@ -44,7 +44,7 @@ namespace Simons.Clients.Http
         protected virtual string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
         {
             EnsureValidCaller(caller);
-            return QueryHelpers.AddQueryString(Uri(caller), dict);
+            return QueryHelpers.AddQueryString(Uri(caller: caller), dict);
         }
 
         protected virtual string AdjustCallerMemberName(string? caller)

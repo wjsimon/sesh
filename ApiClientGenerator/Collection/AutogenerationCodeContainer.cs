@@ -8,6 +8,7 @@ namespace Simons.Generators.HttpClient.Collection
         private string _namespace = "";
         private string _class = "";
         private List<string> _publicConstructors = new();
+        private List<string> _privateFields = new();
         private List<string> _publicProperties = new();
         private List<(string, string[])> _publicMethods = new();
 
@@ -33,6 +34,11 @@ namespace Simons.Generators.HttpClient.Collection
         {
             //all the inherited constructors have empty body by default
             _publicConstructors.Add(constructorDefinition);
+        }
+
+        public void AddPrivateFieldDefinition(string fieldDefinition)
+        {
+            _privateFields.Add(fieldDefinition);
         }
 
         public void AddPublicPropertyDefinition(string propertyDefinition)
@@ -67,6 +73,11 @@ namespace Simons.Generators.HttpClient.Collection
                 lines.Add(line);
             }
             lines.Add("");
+            foreach(string line in _privateFields)
+            {
+                lines.Add(line);
+            }
+            lines.Add("");
             foreach (string line in _publicProperties)
             {
                 lines.Add(line);
@@ -75,7 +86,7 @@ namespace Simons.Generators.HttpClient.Collection
             foreach ((string Def, string[] Body) method in _publicMethods)
             {
                 lines.Add(method.Def);
-                if (method.Body.Count() == 1)
+                if (method.Body.Length == 1)
                 {
                     lines.Add($"\t=> {method.Body.First()}");
                 }

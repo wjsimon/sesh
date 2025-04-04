@@ -32,6 +32,10 @@ namespace Simons.Generators.HttpClient
 
         private static IEnumerable<Assembly> CollectAssemblies(GeneratorArguments args, GeneratorTrace trace)
         {
+            AddIfVerbose(args, trace, $"Assembly collection starting with: {
+                string.Join(", ", args.PathMappings.Select(kvp => $"({kvp.Key.ToString()}, {kvp.Value.ToString()})"))
+            }");
+
             var mappings = args.PathMappings;
             HashSet<Assembly> set = [];
 
@@ -108,7 +112,7 @@ namespace Simons.Generators.HttpClient
                 .AddConstructor(
                     $"{info.ControllerRoute}ApiClient",
                     [new("HttpClientHandler", "httpClientHandler")])
-                .AddGetOnlyProperty(typeof(string), "ApiControllerName", info.ControllerName);
+                .AddInitProperty(typeof(string), "ApiControllerRoute", info.ControllerName, isOverride: true);
 
             foreach (var method in info.Methods)
             {
