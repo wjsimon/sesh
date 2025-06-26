@@ -1,6 +1,6 @@
 ## About
 
-SESH, Simons Extra Simple HttpClient, is a stripped-down, modern C# wrapper for Microsofts HttpClient, allowing fast & easy access to some specifications of Get & Post methods, as well as a simple code generator making use of this wrapper to automatically create functioning client classes for your server-side controllers in a project/directory of your choosing.
+SesH, Simons extra simple HttpClient, is a stripped-down, modern C# wrapper for Microsofts HttpClient, allowing fast & easy access to some specifications of Get & Post methods, as well as a simple code generator making use of this wrapper to automatically create functioning client classes for your server-side controllers in a project/directory of your choosing.
 
 Meant for people who often set up larger server-side controllers, or many of them, and want to reduce manually writing boiler-plate while testing. As a bonus, it keeps the code somewhat organized out-of-the-box. 
 
