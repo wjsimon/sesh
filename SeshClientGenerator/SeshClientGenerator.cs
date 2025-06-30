@@ -172,7 +172,7 @@ namespace Sesh.Generators.HttpClient
         private static string GetNamespace(string outputDir)
         {
             var split = outputDir.Split('\\');
-            var assembly = Assembly.GetEntryAssembly().GetName().Name;
+            var assembly = Assembly.GetEntryAssembly()?.GetName().Name;
 
             if (assembly == null)
             {
@@ -180,7 +180,7 @@ namespace Sesh.Generators.HttpClient
                 return string.Empty;
             }
 
-            var index = split.IndexOf(assembly);
+            var index = split.LastIndexOf(assembly);
             if (index == -1) //"weird" (unconventional folder structure)
             {
                 //trace?
