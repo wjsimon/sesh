@@ -17,8 +17,12 @@ If you wish to only use the wrapper, you do not need to reference the included g
 ### 1. Using the Wrapper
 
 1. Add the "Sesh.Clients.Http.dll" to your project's dependecies
-2. Create a new instance of "Sesh" using the constructor that best fits your project structure. If you intend to use multiple instances for multiple controllers in a 1-to-1 fashion, make sure to pass a value for the "route" parameter, so that you can use Sesh's "Uri()" method.
-3. Call Get(Uri("action")) or Post((Uri("action")) on the Sesh instance. If "route" wasn't passed in the constructor, e.g. when you use a single instance for multiple controllers, you cannot use Uri() have to call the Get() and Post() passing the full api action route.
+2. Create a new instance of "Sesh" using the constructor that best fits your project structure.
+3. Call GetAsync<T>() or one of the PostAsync() methods on the Sesh instance.
+
+
+Here is an example creating a simple usable instance of Sesh within the all-time-favourite Visual Studio "WeatherForecast" Web API project template.
+![image](https://github.com/user-attachments/assets/55fd672d-7a8c-48a2-a768-5c14970f815a)
 
 ### 2. Using the client generator
 
@@ -27,6 +31,18 @@ If you wish to only use the wrapper, you do not need to reference the included g
 3. Annotate the controllers method with the ReturnsAttribute, passing the type that is returned inside the ObjectResult. If nothing is returned, you may annotate with typeof(void). If nothing is annotated, "object" will be used in the client class method signatures instead.
 4. Run the generator. You can do this either via an extra project, most conveniently a console project, or use an extra build configuration and add the call to the generator to your main entry point's Main() method.
 5. Create an instance of the client where needed. You can now call your backend controllers methods through the client by invoking the client class' methods of the same name. E.g. if your backend controllers has a "GetMotorcycles(string manufacturer)" method, so will your client. Name and signature match exactly if your attribute-based annotations are accurate.
+
+Here is an example of the annotated WeatherForecastController from the same template project, the generator call, and the output class.
+#### Annotated controller class
+![image](https://github.com/user-attachments/assets/301193ef-68d0-493c-b237-2f0d2759c3df)
+
+#### Generator call
+![image](https://github.com/user-attachments/assets/cf3c66ba-6225-42ac-9b48-2d3a47fd4078)
+
+#### Output class
+![image](https://github.com/user-attachments/assets/abdf7464-75cc-43ee-98c5-f490effb3a6c)
+
+**Note how I used an 'IEnumerable<int>' instead of 'int[]' in the "Returns" annotation. The generator does not check the controller methods actual return type when generation the client method even if there is one. This is intended behaviour, as you should be using IActionResult instead of the actual return type.**
 
 **This is a prototyping library I created for personal use. It strongly correlates with how I code, and therefore, many features of ASP.NET Controllers are not yet supported. Feel free to add to the project by opening and issue and a corresponding pull request.**
 **For now, there's no further documentation. To get more information on how certain features work, you'll have to dig through the source. You can also shoot me a message here and I'll do my best to help out.** 
