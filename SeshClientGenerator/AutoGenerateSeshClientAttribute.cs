@@ -5,5 +5,5 @@
     /// ApiClient class being generated.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class AutoGenerateApiClientAttribute : Attribute;
+    public class AutoGenerateSeshClientAttribute : Attribute;
 }

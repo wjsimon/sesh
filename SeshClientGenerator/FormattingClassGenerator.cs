@@ -22,7 +22,7 @@ namespace Sesh.Generators.HttpClient
 
         public FormattingClassGenerator AddClass(AutogenerationInformation classInfo)
         {
-            _container.SetClassDefinition($"public{(classInfo.GenerateAsPartial ? " partial" : "")} class {classInfo.ControllerRoute}ApiClient : FastApiClientBase");
+            _container.SetClassDefinition($"public{(classInfo.GenerateAsPartial ? " partial" : "")} class {classInfo.ControllerRoute}SeshClient : SeshBase");
             return this;
         }
 
@@ -34,7 +34,6 @@ namespace Sesh.Generators.HttpClient
 
         public FormattingClassGenerator AddInitProperty(Type returnValue, string propertyName, string propertyValue, bool isOverride = false)
         {
-            //protected override string ApiControllerRoute { get => throw new NotImplementedException(); init => throw new NotImplementedException(); }
             string fieldName = propertyName.FirstToLower();
             _container.AddPublicPropertyDefinition($"public {(isOverride ? "override " : "")}" +
                 $"{SwapPrimitive(returnValue)} {propertyName} {{ get => _{fieldName}; init => _{fieldName} = value; }}");

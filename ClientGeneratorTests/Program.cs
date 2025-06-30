@@ -10,7 +10,8 @@ internal class Program
             .Create(
                 save: true, 
                 printGeneratedCode: true,
-                verbose: true)
+                verbose: true,
+                outputDir: "D:\\simonssoftware\\libs\\http-api-prototyping\\simons-http\\ClientGeneratorTests\\output")
             .AddRange([
                 (typeof(TestController), typeof(SeshBase)),
                 //(typeof(AutogenerateController), typeof(AutogenerateController))

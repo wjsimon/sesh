@@ -14,7 +14,7 @@ namespace Sesh.Clients.Http
         public SeshBase(HttpClientHandler httpClientHandler) : this(new HttpClient(httpClientHandler)) { }
 
         protected readonly IHttpWrapper _httpWrapper;
-        public abstract string ApiControllerRoute { get; init; }
+        public abstract string Route { get; init; }
 
         protected virtual Task<TValue?> GetAsync<TValue>(string? requestUri)
             => _httpWrapper.GetAsync<TValue>(requestUri);
@@ -31,7 +31,7 @@ namespace Sesh.Clients.Http
 
             if (parameters is null)
             {
-                return $"{ApiControllerRoute}/{AdjustCallerMemberName(caller)}";
+                return $"{Route}/{AdjustCallerMemberName(caller)}";
             }
 
             Dictionary<string, string?> param = new([

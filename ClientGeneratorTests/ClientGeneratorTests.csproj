@@ -12,4 +12,8 @@
     <ProjectReference Include="..\SeshClient\SeshClient.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="output\" />
+  </ItemGroup>
+
 </Project>

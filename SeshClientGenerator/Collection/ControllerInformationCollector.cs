@@ -58,7 +58,7 @@ namespace Sesh.Generators.HttpClient.Collection
         {
             foreach (Type type in assembly.GetTypes())
             {
-                if (type.IsDefined(typeof(AutoGenerateApiClientAttribute)))
+                if (type.IsDefined(typeof(AutoGenerateSeshClientAttribute)))
                 {
                     yield return type;
                 }

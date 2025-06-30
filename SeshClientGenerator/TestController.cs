@@ -2,7 +2,7 @@
 
 namespace Sesh.Generators.HttpClient
 {
-    [ApiController, Route("[controller]"), AutoGenerateApiClient]
+    [ApiController, Route("[controller]"), AutoGenerateSeshClient]
     public class TestController : ControllerBase
     {
         //[HttpGet, Returns(typeof(string))]

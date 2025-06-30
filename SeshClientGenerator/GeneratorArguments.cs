@@ -10,7 +10,8 @@ namespace Sesh.Generators.HttpClient
             bool fileNameMatchesClassName,
             bool printGeneratedCode,
             bool printProgress,
-            bool verbose
+            bool verbose,
+            string? outputDir
         )
         {
             this.Save = save;
@@ -18,6 +19,7 @@ namespace Sesh.Generators.HttpClient
             this.PrintGeneratedCode = printGeneratedCode;
             this.PrintProgress = printProgress;
             this.Verbose = verbose;
+            this.OutputDir = outputDir?.TrimEnd('\\').Trim(); //trim trailing slashes; copying folder paths from VS includes them but we don't want them for the filpath generation
         }
 
         private Dictionary<Type, string> _pathMappings { get; set; } = []; //type = server, string = client
@@ -32,6 +34,7 @@ namespace Sesh.Generators.HttpClient
         public bool PrintGeneratedCode { get; private set; }
         public bool PrintProgress { get; private set; }
         public bool Verbose { get; private set; }
+        public string? OutputDir { get; private set; }
         public bool GeneratePartials { get; private set; }
         public bool AreNullReturnsAllowed { get; private set; }
 
@@ -40,9 +43,10 @@ namespace Sesh.Generators.HttpClient
             bool fileNameMatchesClassName = true,
             bool printGeneratedCode = false,
             bool printProgress = true,
-            bool verbose = false)
+            bool verbose = false,
+            string? outputDir = null)
         {
-            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode, printProgress, verbose);
+            var args = new GeneratorArguments(save, fileNameMatchesClassName, printGeneratedCode, printProgress, verbose, outputDir);
             return args;
         }
 

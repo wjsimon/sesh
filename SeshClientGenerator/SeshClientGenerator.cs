@@ -73,17 +73,17 @@ namespace Sesh.Generators.HttpClient
                 }
 
                 info.Apply(args);
-                string fileContent = GenerateApiClient(info!, args.TypeMappings[info!.ControllerType], trace);
+                string fileContent = GenerateSeshClient(info!, args.TypeMappings[info!.ControllerType], trace);
                 string fileName = MakeFileName(info!);
-                string filePath = $"{args.PathMappings[info!.ControllerType]}";
+                string filePath = args.OutputDir != null ? args.OutputDir : $"{args.PathMappings[info!.ControllerType]}";
 
                 if (args.PrintProgress) {  trace.Add(info); }
-                if (args.PrintGeneratedCode) { trace.Add(fileContent);}
+                if (args.PrintGeneratedCode) { trace.Add(fileContent); }
 
                 if (args.Save && !File.Exists(filePath))
                 {
                     SaveFile(fileName, filePath, fileContent);
-                    trace.Add($"Succesfully saved generated ApiClient for {info!.ControllerType} to {filePath}");
+                    trace.Add($"Succesfully saved generated SeshClient for {info!.ControllerType} to {filePath}");
                 }
                 else
                 {
@@ -92,10 +92,10 @@ namespace Sesh.Generators.HttpClient
             }
         }
 
-        private static string GenerateApiClient(AutogenerationInformation info, Type targetType, GeneratorTrace trace)
-            => GenerateApiClient(info, GetNativeNamespace(targetType), trace);
+        private static string GenerateSeshClient(AutogenerationInformation info, Type targetType, GeneratorTrace trace)
+            => GenerateSeshClient(info, GetNativeNamespace(targetType), trace);
 
-        private static string GenerateApiClient(AutogenerationInformation info, string nameSpace, GeneratorTrace trace)
+        private static string GenerateSeshClient(AutogenerationInformation info, string nameSpace, GeneratorTrace trace)
         {
             trace.Add($"Starting generation of {info.ControllerName}...");
             FormattingClassGenerator generator = new();
@@ -104,15 +104,15 @@ namespace Sesh.Generators.HttpClient
                 .AddNamespace(nameSpace)
                 .AddClass(info)
                 .AddConstructor(
-                    $"{info.ControllerRoute}ApiClient", 
+                    $"{info.ControllerRoute}SeshClient", 
                     [new("IHttpWrapper", "httpWrapper")])
                 .AddConstructor(
-                    $"{info.ControllerRoute}ApiClient",
+                    $"{info.ControllerRoute}SeshClient",
                     [new("HttpClient", "httpClient")])
                 .AddConstructor(
-                    $"{info.ControllerRoute}ApiClient",
+                    $"{info.ControllerRoute}SeshClient",
                     [new("HttpClientHandler", "httpClientHandler")])
-                .AddInitProperty(typeof(string), "ApiControllerRoute", info.ControllerName, isOverride: true);
+                .AddInitProperty(typeof(string), "Route", info.ControllerName, isOverride: true);
 
             foreach (var method in info.Methods)
             {
@@ -129,11 +129,11 @@ namespace Sesh.Generators.HttpClient
         {
             if (info.GenerateAsPartial) //partial inset cannot be null if GenerateAsPartial is set
             {
-                return $"{info.ControllerRoute}ApiClient.{info.PartialInset}.cs";
+                return $"{info.ControllerRoute}SeshClient.{info.PartialInset}.cs";
             }
             else
             {
-                return $"{info.ControllerRoute}ApiClient.cs";
+                return $"{info.ControllerRoute}SeshClient.cs";
             }
         }
         private static void SaveFile(string fileName, string filePath, string fileContent)

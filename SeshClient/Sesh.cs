@@ -10,9 +10,9 @@ namespace Sesh.Clients.Http
         public Sesh(HttpClient httpClient) : base(httpClient) { }
         public Sesh(HttpClientHandler httpClientHandler) : base(httpClientHandler) { }
 
-        private readonly string _apiControllerName = string.Empty;
+        private readonly string _route = string.Empty;
 
-        public override string ApiControllerRoute { get => _apiControllerName; init => _apiControllerName = string.Empty; }
+        public override string Route { get => _route; init => _route = string.Empty; }
 
         protected override string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
             => throw new NotSupportedException();
