@@ -42,7 +42,7 @@ Here is an example of the annotated WeatherForecastController from the same temp
 #### Output class
 ![image](https://github.com/user-attachments/assets/abdf7464-75cc-43ee-98c5-f490effb3a6c)
 
-**Note how I used an 'IEnumerable<int>' instead of 'int[]' in the "Returns" annotation. The generator does not check the controller methods actual return type when generation the client method even if there is one. This is intended behaviour, as you should be using IActionResult instead of the actual return type.**
+**Note how I used an 'IEnumerable<int>' instead of 'int[]' in the "Returns" annotation. The generator does not check the controller methods actual return type when generation the client method even if there is one.**
 
 **This is a prototyping library I created for personal use. It strongly correlates with how I code, and therefore, many features of ASP.NET Controllers are not yet supported. Feel free to add to the project by opening and issue and a corresponding pull request.**
 **For now, there's no further documentation. To get more information on how certain features work, you'll have to dig through the source. You can also shoot me a message here and I'll do my best to help out.** 
