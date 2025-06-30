@@ -75,7 +75,7 @@ namespace Sesh.Generators.HttpClient
                 }
 
                 info.Apply(args);
-                string fileContent = GenerateSeshClient(info!, args.TypeMappings[info!.ControllerType], trace);
+                string fileContent = GenerateSeshClient(info!, args, trace);
                 string fileName = MakeFileName(info!);
                 string filePath = args.OutputDir != null ? args.OutputDir : $"{args.PathMappings[info!.ControllerType]}";
 
@@ -94,8 +94,17 @@ namespace Sesh.Generators.HttpClient
             }
         }
 
-        private static string GenerateSeshClient(AutogenerationInformation info, Type targetType, GeneratorTrace trace)
-            => GenerateSeshClient(info, GetNativeNamespace(targetType), trace);
+        private static string GenerateSeshClient(AutogenerationInformation info, GeneratorArguments args, GeneratorTrace trace)
+        {
+            if (args.OutputDir == null)
+            {
+                return GenerateSeshClient(info, GetTargetTypeNamespace(args.TypeMappings[info!.ControllerType]), trace);
+            }
+            else
+            {
+                return GenerateSeshClient(info, GetNamespace(args.OutputDir), trace);
+            }
+        }
 
         private static string GenerateSeshClient(AutogenerationInformation info, string nameSpace, GeneratorTrace trace)
         {
@@ -160,7 +169,31 @@ namespace Sesh.Generators.HttpClient
             info.Reason = $"{type} was already generated";
         }
 
-        private static string GetNativeNamespace(Type type)
+        private static string GetNamespace(string outputDir)
+        {
+            var split = outputDir.Split('\\');
+            var assembly = Assembly.GetEntryAssembly().GetName().Name;
+
+            if (assembly == null)
+            {
+                //can't load executing assembly?
+                return string.Empty;
+            }
+
+            var index = split.IndexOf(assembly);
+            if (index == -1) //"weird" (unconventional folder structure)
+            {
+                //trace?
+                return string.Empty;
+            }
+            else
+            {
+                var remaining = split[index..];
+                return string.Join('.', remaining);
+            }
+        }
+
+        private static string GetTargetTypeNamespace(Type type)
         {
             if (string.IsNullOrEmpty(type.FullName)) { return string.Empty; }
             return string.Join('.', type.FullName.Split('.')[..^1]);
