@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Sesh.Generators.HttpClient.Controllers
+namespace SeshLib.Generators.HttpClient.Controllers
 {
     [ApiController, AutoGenerateSeshClient]
     [Route("[controller]")]

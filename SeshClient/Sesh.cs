@@ -1,14 +1,14 @@
 ﻿
 using System.Runtime.CompilerServices;
 
-namespace Sesh.Clients.Http
+namespace SeshLib.Clients.Http
 {
     //easy access stub implementation
     public class Sesh : SeshBase
     {
-        public Sesh(IHttpWrapper httpHandler) : base(httpHandler) { }
-        public Sesh(HttpClient httpClient) : base(httpClient) { }
-        public Sesh(HttpClientHandler httpClientHandler) : base(httpClientHandler) { }
+        public Sesh(IHttpWrapper httpHandler, string? route = null) : base(httpHandler) { if (route != null) { _route = route; }; }
+        public Sesh(HttpClient httpClient, string? route = null) : base(httpClient) { if (route != null) { _route = route; }; }
+        public Sesh(HttpClientHandler httpClientHandler, string? route = null) : base(httpClientHandler) { if (route != null) { _route = route; }; }
 
         private readonly string _route = string.Empty;
 

@@ -1,13 +1,13 @@
-﻿using Sesh.Generators.HttpClient.Collection;
-using Sesh.Generators.HttpClient.Tracing;
+﻿using SeshLib.Generators.HttpClient.Collection;
+using SeshLib.Generators.HttpClient.Tracing;
 using System.Reflection;
 
-namespace Sesh.Generators.HttpClient
+namespace SeshLib.Generators.HttpClient
 {
     public static class SeshClientGenerator
     {
         public const string DEFAULT_INSET = "generated";
-        public const string SESH_USING = "using Sesh.Clients.Http";
+        public const string SESH_USING = "using SeshLib.Clients.Http";
 
         //support for returning null or default / empty collections
         //support interface generation

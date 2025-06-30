@@ -1,7 +1,7 @@
-﻿using Sesh.Generators.HttpClient.Helpers;
+﻿using SeshLib.Generators.HttpClient.Helpers;
 using System.Collections.ObjectModel;
 
-namespace Sesh.Generators.HttpClient
+namespace SeshLib.Generators.HttpClient
 {
     public class GeneratorArguments
     {

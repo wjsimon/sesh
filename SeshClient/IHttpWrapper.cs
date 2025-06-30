@@ -1,4 +1,4 @@
-﻿namespace Sesh.Clients.Http
+﻿namespace SeshLib.Clients.Http
 {
     public interface IHttpWrapper
     {

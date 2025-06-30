@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Sesh.Clients.Http
+namespace SeshLib.Clients.Http
 {
     public class HttpWrapperOptions
     {

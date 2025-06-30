@@ -1,5 +1,5 @@
-﻿using Sesh.Clients.Http;
-using Sesh.Generators.HttpClient;
+﻿using SeshLib.Clients.Http;
+using SeshLib.Generators.HttpClient;
 
 internal class Program
 {

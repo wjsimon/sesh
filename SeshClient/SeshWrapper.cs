@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace Sesh.Clients.Http
+namespace SeshLib.Clients.Http
 {
     internal sealed class SeshWrapper(HttpClient http, HttpWrapperOptions? options = null) : IHttpWrapper
     {
