@@ -14,6 +14,9 @@ namespace Sesh.Generators.HttpClient
             return this;
         }
 
+        public FormattingClassGenerator AddSelfUsing()
+            => this.AddUsings([SeshClientGenerator.SESH_USING]);
+
         public FormattingClassGenerator AddNamespace(string nameSpace)
         {
             _container.SetNamespace($"namespace {nameSpace}");

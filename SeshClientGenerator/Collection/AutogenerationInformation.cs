@@ -8,6 +8,7 @@ namespace Sesh.Generators.HttpClient.Collection
         string ControllerRoute)
     {
         public IEnumerable<AutogenerationMethodInformation> Methods = Enumerable.Empty<AutogenerationMethodInformation>();
+
         public string NameSpace { get; set; } = string.Empty;
         public bool GenerateAsPartial { get; set; } = false;
         public bool AreNullReturnsAllowed { get; set; } = false;

@@ -7,6 +7,8 @@ namespace Sesh.Generators.HttpClient
     public static class SeshClientGenerator
     {
         public const string DEFAULT_INSET = "generated";
+        public const string SESH_USING = "using Sesh.Clients.Http";
+
         //support for returning null or default / empty collections
         //support interface generation
         //maybe support some Span<T> tech for the generated clients if there's a sensible way to use it
@@ -101,6 +103,7 @@ namespace Sesh.Generators.HttpClient
             FormattingClassGenerator generator = new();
 
             generator
+                .AddSelfUsing()
                 .AddNamespace(nameSpace)
                 .AddClass(info)
                 .AddConstructor(
