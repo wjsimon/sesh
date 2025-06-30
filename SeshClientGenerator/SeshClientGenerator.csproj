@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiClient\SeshClient.csproj" />
+    <ProjectReference Include="..\SeshClient\SeshClient.csproj" />
   </ItemGroup>
 
 </Project>
