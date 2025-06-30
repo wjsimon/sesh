@@ -5,8 +5,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
-    <AssemblyName>Sesh.Clients.Http</AssemblyName>
-    <RootNamespace>Sesh.Clients.Http</RootNamespace>
+    <AssemblyName>SeshLib.Clients.Http</AssemblyName>
+    <RootNamespace>SeshLib.Clients.Http</RootNamespace>
     <LangVersion>preview</LangVersion>
     <Version>0.0.1-preview</Version>
     <AssemblyVersion>0.0.1</AssemblyVersion>

@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sesh.Generators.HttpClient.Collection.Methods;
-using Sesh.Generators.HttpClient.Tracing;
+using SeshLib.Generators.HttpClient.Collection.Methods;
+using SeshLib.Generators.HttpClient.Tracing;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Sesh.Generators.HttpClient.Collection
+namespace SeshLib.Generators.HttpClient.Collection
 {
     internal static class ControllerInformationCollector
     {

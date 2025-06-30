@@ -1,7 +1,7 @@
-﻿using Sesh.Generators.HttpClient.Helpers;
+﻿using SeshLib.Generators.HttpClient.Helpers;
 using System.Text;
 
-namespace Sesh.Generators.HttpClient.Collection.Methods
+namespace SeshLib.Generators.HttpClient.Collection.Methods
 {
     internal abstract class MethodBodyDescription
     {

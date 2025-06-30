@@ -1,6 +1,6 @@
-﻿using Sesh.Generators.HttpClient.Helpers;
+﻿using SeshLib.Generators.HttpClient.Helpers;
 
-namespace Sesh.Generators.HttpClient.Collection.Methods
+namespace SeshLib.Generators.HttpClient.Collection.Methods
 {
     internal sealed class PostMethodBody : MethodBodyDescription
     {

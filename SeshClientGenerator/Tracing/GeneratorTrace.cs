@@ -1,6 +1,6 @@
-﻿using Sesh.Generators.HttpClient.Collection;
+﻿using SeshLib.Generators.HttpClient.Collection;
 
-namespace Sesh.Generators.HttpClient.Tracing
+namespace SeshLib.Generators.HttpClient.Tracing
 {
     internal class GeneratorTrace
     {

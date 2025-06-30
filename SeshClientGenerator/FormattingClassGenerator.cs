@@ -1,9 +1,9 @@
-﻿using Sesh.Generators.HttpClient.Collection;
-using Sesh.Generators.HttpClient.Collection.Methods;
-using Sesh.Generators.HttpClient.Helpers;
+﻿using SeshLib.Generators.HttpClient.Collection;
+using SeshLib.Generators.HttpClient.Collection.Methods;
+using SeshLib.Generators.HttpClient.Helpers;
 using System.Text;
 
-namespace Sesh.Generators.HttpClient
+namespace SeshLib.Generators.HttpClient
 {
     internal class FormattingClassGenerator
     {

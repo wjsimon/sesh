@@ -1,6 +1,6 @@
-﻿using Sesh.Generators.HttpClient.Collection.Methods;
+﻿using SeshLib.Generators.HttpClient.Collection.Methods;
 
-namespace Sesh.Generators.HttpClient.Collection
+namespace SeshLib.Generators.HttpClient.Collection
 {
     internal record class AutogenerationInformation(
         Type ControllerType,
