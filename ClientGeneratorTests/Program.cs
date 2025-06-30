@@ -1,18 +1,18 @@
-﻿using Simons.Clients.Http;
-using Simons.Generators.HttpClient;
+﻿using Sesh.Clients.Http;
+using Sesh.Generators.HttpClient;
 
 internal class Program
 {
     private static void Main(string[] args)
     {            
-        ApiClientGenerator.Generate(
+        SeshClientGenerator.Generate(
             GeneratorArguments
             .Create(
                 save: true, 
                 printGeneratedCode: true,
                 verbose: true)
             .AddRange([
-                (typeof(TestController), typeof(FastApiClientBase)),
+                (typeof(TestController), typeof(SeshBase)),
                 //(typeof(AutogenerateController), typeof(AutogenerateController))
             ])
             .AllowNullReturns()

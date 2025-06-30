@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiClientGenerator\ApiClientGenerator.csproj" />
-    <ProjectReference Include="..\ApiClient\ApiClient.csproj" />
+    <ProjectReference Include="..\SeshClientGenerator\SeshClientGenerator.csproj" />
+    <ProjectReference Include="..\SeshClient\SeshClient.csproj" />
   </ItemGroup>
 
 </Project>
