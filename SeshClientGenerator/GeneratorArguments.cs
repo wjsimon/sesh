@@ -58,7 +58,8 @@ namespace Sesh.Generators.HttpClient
 
         public GeneratorArguments Add(Type controllerType, Type targetAssemblyType)
         {
-            string? location = GetLocation(targetAssemblyType, this.FileNameMatchesClassName);
+            string? location = this.OutputDir != null ? this.OutputDir :
+                GetLocation(targetAssemblyType, this.FileNameMatchesClassName);
 
             Console.WriteLine($"location: {location}");
             if (!string.IsNullOrEmpty(location)) 
