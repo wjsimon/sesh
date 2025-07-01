@@ -31,7 +31,7 @@ Here is an example creating a simple usable instance of Sesh within the all-time
 3. Annotate the controllers method with the ReturnsAttribute, passing the type that is returned inside the ObjectResult. If nothing is returned, you may annotate with typeof(void). If nothing is annotated, "object" will be used in the client class method signatures instead.
 4. Run the generator. You can do this either via an extra project, e.g. a console project, or use an extra build configuration and add the call to the generator to your main entry point's Main() method.
 
-   Note: Starting from the .NET 10 Preview, 'dotnet run app.cs' is available. You can therefore adjust and use the included 'sesh-generate.cs' instead of using an extra project or the build config switch.
+   Note: Starting from the .NET 10 Preview, 'dotnet run app.cs' is available. You can therefore also use the included 'sesh-generate.cs' instead of using an extra project or the build config switch. Adjust file to your project configuration before use.
 
 6. Create an instance of the client where needed. You can now call your backend controllers methods through the client by invoking the client class' methods of the same name. E.g. if your backend controllers has a "GetMotorcycles(string manufacturer)" method, so will your client. Name and signature match exactly if your attribute-based annotations are accurate.
 
