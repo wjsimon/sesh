@@ -7,7 +7,7 @@ Meant for reducing the need to manually write boiler-plate code when setting up 
 **These libraries are intended for prototyping use only. Not safe for production, as many safety features are not supported.**
 **As of writing of this note (09.03.2025), only json-based APIs are supported by the wrapper. Should this ever change, this note will be updated**
 
-.NET 9.0+ support only. This is a preview still. If there's anything missing which you'd like to see, feel free to open an issue or send me a message.
+.NET 10.0+ support only. This is a preview still. If there's anything missing which you'd like to see, feel free to open an issue or send me a message.
 
 The current master is available as pre-built DLLs here: [build.zip](https://github.com/user-attachments/files/19150109/build.zip).
 If you wish to only use the wrapper, you do not need to reference the included generator .dll.
