@@ -59,4 +59,4 @@ Here is an example of the annotated WeatherForecastController from the same temp
 #### 
 
 **This is a prototyping library I created for personal use. It strongly correlates with how I code, and therefore, many features of ASP.NET Controllers are not yet supported. Feel free to add to the project by opening issues and/or corresponding pull requests.**
-**For now, there's no further documentation. To get more information on how certain features work, you'll have to dig through the source. You can also shoot me a message here and I'll do my best to help out.** 
+**For now, there's no further documentation. To get more information on how certain features work, you'll have to dig through the source or open an issue if uncertain.** 
