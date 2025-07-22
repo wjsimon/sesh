@@ -1,5 +1,4 @@
-﻿using SeshLib.Clients.Http;
-using SeshLib.Generators.HttpClient;
+﻿using SeshLib.Generators.HttpClient;
 
 internal class Program
 {
@@ -11,7 +10,7 @@ internal class Program
                 save: true, 
                 printGeneratedCode: true,
                 verbose: true,
-                outputDir: "D:\\simonssoftware\\libs\\http-api-prototyping\\simons-http\\ClientGeneratorTests\\output")
+                outputDir: "C:\\Users\\ws\\Source\\Repos\\sesh\\ClientGeneratorTests\\output\\")
             .AddRange([
                 typeof(TestController),
             ])

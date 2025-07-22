@@ -29,12 +29,19 @@ namespace SeshLib.Generators.HttpClient.Collection.Methods
             }
         }
 
-        private static string TaskSnippetFromMethodReturnAnnotation(Type returnType)
+        private string TaskSnippetFromMethodReturnAnnotation(Type returnType)
             => returnType != typeof(void) ? TaskReturnValueSnippet(returnType) : "";
 
-        private static string TaskReturnValueSnippet(Type returnType)
+        private string TaskReturnValueSnippet(Type returnType)
         {
-            return $"<{TypeHelper.TypeAsCodeSnippet(returnType)}>";
+            if (MethodInfo.AreNullReturnsAllowed)
+            {
+                return $"<{TypeHelper.TypeAsCodeSnippet(returnType)}?>";
+            }
+            else
+            {
+                return $"<{TypeHelper.TypeAsCodeSnippet(returnType)}>";
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SeshLib.Generators.HttpClient.Helpers;
+using System.Reflection;
 
 namespace SeshLib.Generators.HttpClient.Collection.Methods
 {
@@ -52,10 +53,17 @@ namespace SeshLib.Generators.HttpClient.Collection.Methods
         private static string MakeUri(Type returnType, Type payloadType, string payloadName, List<(Type Type, string Name)> parameterValues)
             => $"Uri(dict), {payloadName}";
 
-        private static string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
+        private string TaskSnippetFromMethodReturnAnnotation(Type returnType, Type payloadType)
         {
             var returnStr = returnType != typeof(void) ? $"<{TypeHelper.TypeAsCodeSnippet(payloadType)}, " : "<";
-            return $"{returnStr}{(payloadType != typeof(void) ? $"{TypeHelper.TypeAsCodeSnippet(returnType)}" : "")}>";
+
+            if (MethodInfo.AreNullReturnsAllowed)
+            {
+                return $"{returnStr}{(payloadType != typeof(void) ? $"{TypeHelper.TypeAsCodeSnippet(returnType)}" : "")}?>";
+            }
+            else {
+                return $"{returnStr}{(payloadType != typeof(void) ? $"{TypeHelper.TypeAsCodeSnippet(returnType)}" : "")}>";
+            }
         }
     }
 }
