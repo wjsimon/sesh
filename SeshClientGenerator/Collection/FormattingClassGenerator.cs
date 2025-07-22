@@ -1,9 +1,8 @@
-﻿using SeshLib.Generators.HttpClient.Collection;
-using SeshLib.Generators.HttpClient.Collection.Methods;
+﻿using SeshLib.Generators.HttpClient.Collection.Methods;
 using SeshLib.Generators.HttpClient.Helpers;
 using System.Text;
 
-namespace SeshLib.Generators.HttpClient
+namespace SeshLib.Generators.HttpClient.Collection
 {
     internal class FormattingClassGenerator
     {
@@ -15,7 +14,7 @@ namespace SeshLib.Generators.HttpClient
         }
 
         public FormattingClassGenerator AddSelfUsing()
-            => this.AddUsings([SeshClientGenerator.SESH_USING]);
+            => AddUsings([SeshClientGenerator.SESH_USING]);
 
         public FormattingClassGenerator AddNamespace(string nameSpace)
         {
