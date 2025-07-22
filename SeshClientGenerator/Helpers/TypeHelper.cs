@@ -9,7 +9,18 @@
                 return _primitiveMatches[type.Name];
             }
 
-            if (IsEnumerable(type))
+            if (type.IsArray) 
+            {
+                if (_primitiveMatches.ContainsKey(type.Name[..^2]))
+                {
+                    return $"{_primitiveMatches[type.Name[..^2]]}[]";
+                }
+                else
+                {
+                    return type.Name;
+                }
+            }
+            else if (IsEnumerable(type))
             {
                 ReadOnlySpan<char> name = ReturnTypeWithoutEnumerableSuffix(type.Name);
                 var s = $"{name.ToString()}<{string.Join(", ", type.GenericTypeArguments.Select(t => TypeAsCodeSnippet(t)))}>"; ;
