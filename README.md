@@ -54,9 +54,7 @@ Here is an example of the annotated WeatherForecastController from the same temp
 #### Output class
 <img width="851" height="316" alt="image" src="https://github.com/user-attachments/assets/42093201-fe6d-4b5e-bd56-c44ff4176535" />
 
-**Note how I used an 'IEnumerable<int>' instead of 'int[]' in the "Returns" annotation. The generator does not check the controller methods actual return type when generation the client method even if there is one.**
-
-#### 
+##
 
 **This is a prototyping library I created for personal use. It strongly correlates with how I code, and therefore, many features of ASP.NET Controllers are not yet supported. Feel free to add to the project by opening issues and/or corresponding pull requests.**
 **For now, there's no further documentation. To get more information on how certain features work, you'll have to dig through the source or open an issue if uncertain.** 
