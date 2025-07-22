@@ -1,5 +1,5 @@
-﻿using Sesh.Clients.Http;
-using Sesh.Generators.HttpClient;
+﻿using SeshLib.Clients.Http;
+using SeshLib.Generators.HttpClient;
 
 internal class Program
 {
@@ -13,8 +13,7 @@ internal class Program
                 verbose: true,
                 outputDir: "D:\\simonssoftware\\libs\\http-api-prototyping\\simons-http\\ClientGeneratorTests\\output")
             .AddRange([
-                (typeof(TestController), typeof(SeshBase)),
-                //(typeof(AutogenerateController), typeof(AutogenerateController))
+                typeof(TestController),
             ])
             .AllowNullReturns()
         );

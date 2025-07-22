@@ -1,5 +1,5 @@
 
-namespace Sesh.Clients.Http
+namespace SeshLib.Clients.Http
 {
 	public class TestSeshClient : SeshBase
 	{

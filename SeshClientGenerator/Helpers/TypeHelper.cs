@@ -1,4 +1,4 @@
-﻿namespace Sesh.Generators.HttpClient.Helpers
+﻿namespace SeshLib.Generators.HttpClient.Helpers
 {
     internal static class TypeHelper
     {

@@ -1,4 +1,4 @@
-﻿namespace Sesh.Generators.HttpClient.Collection
+﻿namespace SeshLib.Generators.HttpClient.Collection
 {
     internal enum AutogenerationResult
     {

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Sesh.Generators.HttpClient.Collection
+namespace SeshLib.Generators.HttpClient.Collection
 {
     internal class AutogenerationCodeContainer
     {

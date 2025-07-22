@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using System.Runtime.CompilerServices;
 
-namespace Sesh.Clients.Http
+namespace SeshLib.Clients.Http
 {
     public abstract class SeshBase
     {

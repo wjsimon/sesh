@@ -1,7 +1,7 @@
-﻿using Sesh.Generators.HttpClient.Helpers;
+﻿using SeshLib.Generators.HttpClient.Helpers;
 using System.Collections.ObjectModel;
 
-namespace Sesh.Generators.HttpClient
+namespace SeshLib.Generators.HttpClient
 {
     public class GeneratorArguments
     {
@@ -19,16 +19,21 @@ namespace Sesh.Generators.HttpClient
             this.PrintGeneratedCode = printGeneratedCode;
             this.PrintProgress = printProgress;
             this.Verbose = verbose;
-            this.OutputDir = outputDir?.TrimEnd('\\').Trim(); //trim trailing slashes; copying folder paths from VS includes them but we don't want them for the filpath generation
+
+            if (outputDir != null)
+            {
+                this.OutputDir = Path.GetFullPath(outputDir.TrimEnd('\\').Trim()); //trim trailing slashes; copying folder paths from VS includes them but we don't want them for the filepath generation
+            }
         }
 
         private Dictionary<Type, string> _pathMappings { get; set; } = []; //type = server, string = client
         private Dictionary<Type, Type> _typeMappings { get; set; } = []; ////type = server, type = client
         private HashSet<Type>? _selectedPartials;
         private Dictionary<Type, string>? _partialInsets;
-        public ReadOnlyDictionary<Type, string> PathMappings => _pathMappings.AsReadOnly();
-        public ReadOnlyDictionary<Type, Type> TypeMappings => _typeMappings.AsReadOnly();
-        
+
+        internal ReadOnlyDictionary<Type, string> PathMappings => _pathMappings.AsReadOnly();
+        internal ReadOnlyDictionary<Type, Type> TypeMappings => _typeMappings.AsReadOnly();
+
         public bool Save { get; private set; }
         public bool FileNameMatchesClassName { get; private set; }
         public bool PrintGeneratedCode { get; private set; }
@@ -56,6 +61,17 @@ namespace Sesh.Generators.HttpClient
             return this;
         }
 
+        public GeneratorArguments AddRange(IEnumerable<Type> types)
+        {
+            if (this.OutputDir == null) { throw new InvalidOperationException("OutputDir needs to be set when using simple types"); }
+            foreach (var type in types)
+            {
+                Add(type);
+            }
+
+            return this;
+        }
+
         public GeneratorArguments Add(Type controllerType, Type targetAssemblyType)
         {
             string? location = this.OutputDir != null ? this.OutputDir :
@@ -70,6 +86,10 @@ namespace Sesh.Generators.HttpClient
 
             return this;
         }
+
+        public GeneratorArguments Add(Type controllerType)
+            => Add(controllerType, this.OutputDir!);
+
 
         public GeneratorArguments WithPartials() 
             => WithPartials(null);
