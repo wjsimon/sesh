@@ -2,15 +2,13 @@
 
 namespace SeshLib.Clients.Http
 {
-    //easy access stub implementation
     public class Sesh : SeshBase
     {
-        public Sesh(IHttpWrapper httpHandler, string? route = null) : base(httpHandler) { if (route != null) { _route = route; }; }
-        public Sesh(HttpClient httpClient, string? route = null) : base(httpClient) { if (route != null) { _route = route; }; }
-        public Sesh(HttpClientHandler httpClientHandler, string? route = null) : base(httpClientHandler) { if (route != null) { _route = route; }; }
+        public Sesh(IHttpWrapper httpHandler) : base(httpHandler) { }
+        public Sesh(HttpClient httpClient) : base(httpClient) { }
+        public Sesh(HttpClientHandler httpClientHandler) : base(httpClientHandler) { }
 
         private readonly string _route = string.Empty;
-
         public override string Route { get => _route; init => _route = string.Empty; }
 
         protected override string Uri(Dictionary<string, string?> dict, [CallerMemberName] string? caller = null)
